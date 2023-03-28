@@ -2,8 +2,7 @@
 require("dotenv-safe").config({silent: true});
 
 // importando rotas
-import userRoutes from "./routes/userRoutes";
-import policeReportRoutes from "./routes/policeReportRoutes";
+import logRoutes from "./route/logRoutes";
 
 //importando core da api
 import * as express from "express"
@@ -19,8 +18,7 @@ app.use(express.json())
 app.use(cors())
 
 //utilizando rotas da api
-app.use("/api", userRoutes) 
-app.use("/api", policeReportRoutes) 
+app.use("/api", logRoutes) 
 
 
 export default app

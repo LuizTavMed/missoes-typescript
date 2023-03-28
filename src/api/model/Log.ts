@@ -9,7 +9,7 @@ class Log{
     date!: string 
     
     @Column()
-    event!: string
+    message!: string
 }
 
 export default Log

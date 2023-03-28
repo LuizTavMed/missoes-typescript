@@ -1,35 +1,35 @@
-import { pegaDataAgora } from "../../helpers/pegaDataAgora"
+import getDateNow from "../../helper/getDateNow"
 
 import {Request} from "express"
 
-import Log from "../models/Log"
+import Log from "../model/Log"
 
 import { dataSource } from "../../db/dataSource"
 const repositorioLog = dataSource.getRepository(Log)
 
-export class LogService{
+class LogService{
 
-    async postaLog(req: Request): Promise<Log>{
+    async create(req: Request): Promise<Log>{
         var log = new Log()
-        log.date= pegaDataAgora()
-        log.event = req.body.evento
+        log.date= getDateNow()
+        log.message = req.body.message
         await repositorioLog.save(log)
         return log
     }
     
-    async pegaTodosLogs(): Promise<Log[] | null> {
+    async getAll(): Promise<Log[] | null> {
         const listaTodosLogs = await repositorioLog.find()
         return listaTodosLogs
     }
 
-    async pegaLogPorId(req: Request): Promise<Log | null>{
+    async get(req: Request): Promise<Log | null>{
         const log = await repositorioLog.findBy({
             id: parseInt(req.params.id)
         })
         return log[0]
     }
     
-    async atualizaLogPorId(req: Request): Promise<Log[] | Log>{
+    async update(req: Request): Promise<Log[] | Log>{
         var log = await repositorioLog.findBy({
             id: parseInt(req.params.id)
         })
@@ -37,7 +37,7 @@ export class LogService{
             return log[0]
         }
         if (req.body.evento != undefined){
-            log[0].event = req.body.evento
+            log[0].message = req.body.message
         }
         if (req.body.data != undefined){
             log[0].date = req.body.date
@@ -46,7 +46,7 @@ export class LogService{
         return log[0]
     }
 
-    async deletaLogPorId(req: Request): Promise<Log | Log>{
+    async delete(req: Request): Promise<Log | Log>{
         const log = await repositorioLog.findBy({
             id: parseInt(req.params.id)
         })
@@ -60,3 +60,5 @@ export class LogService{
         
     }
 }
+
+export default LogService
