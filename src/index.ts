@@ -1,5 +1,5 @@
 import app from "./api/app"
-import { dataSource } from "./db/dataSource"
+import dataSource from "./db/dataSource"
 
 dataSource.initialize().then(() =>{
     console.log("banco de dados inicializado")

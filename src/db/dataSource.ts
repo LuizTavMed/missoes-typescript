@@ -5,7 +5,7 @@ import { DataSource } from "typeorm"
 
 import Log from "../api/model/Log"
 
-export const dataSource = new DataSource({
+const dataSource = new DataSource({
     type: "mysql",
     database: "police-station",
     host: process.env.HOST_DATABASE,
@@ -19,3 +19,5 @@ export const dataSource = new DataSource({
     migrations: [],
     subscribers: [],
     })
+
+export default dataSource
