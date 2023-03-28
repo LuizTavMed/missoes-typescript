@@ -3,9 +3,7 @@ import { DataSource } from "typeorm"
 
 //importando entidades do banco
 
-import Log from "../api/models/Log"
-import User  from "../api/models/User"
-import PoliceReport from "../api/models/PoliceReport"
+import Log from "../api/model/Log"
 
 export const dataSource = new DataSource({
     type: "mysql",
@@ -17,7 +15,7 @@ export const dataSource = new DataSource({
     //sid: process.env.SSID_DATABASE,
     synchronize: true,
     logging: true,
-    entities: [Log,User,PoliceReport],
+    entities: [Log],
     migrations: [],
     subscribers: [],
     })
