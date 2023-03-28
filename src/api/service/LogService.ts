@@ -4,7 +4,7 @@ import {Request} from "express"
 
 import Log from "../model/Log"
 
-import { dataSource } from "../../db/dataSource"
+import dataSource from "../../db/dataSource"
 const repositorioLog = dataSource.getRepository(Log)
 
 class LogService{
@@ -57,7 +57,6 @@ class LogService{
             repositorioLog.remove(log[0])
             return log[0]
         }
-        
     }
 }
 
