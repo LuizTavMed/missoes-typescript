@@ -1,5 +1,5 @@
 import LogController from '../../src/api/controller/LogController'
-import LogService from '../../src/api/service/LogService'
+import LogService from '../../src/api/repository/LogRepository'
 import { type MockProxy, mock } from 'jest-mock-extended'
 import type ILogService from '../../src/interface/ILogService'
 import type Log from '../../src/api/model/Log'

@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express'
 
 import LogValidator from '../validator/logValidator'
 
-import LogService from '../service/LogService'
+import LogService from '../repository/LogRepository'
 const logValidator = new LogValidator()
 const logService = new LogService()
 

@@ -7,7 +7,7 @@ import Log from '../model/Log'
 import dataSource from '../../db/dataSource'
 const repositorioLog = dataSource.getRepository(Log)
 
-class LogService {
+class LogRepository {
   async create (req: Request): Promise<Log> {
     const log = new Log()
     log.date = getDateNow()
@@ -58,4 +58,4 @@ class LogService {
   }
 }
 
-export default LogService
+export default LogRepository
