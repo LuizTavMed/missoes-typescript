@@ -1,3 +1,5 @@
 interface ILogValidator {
-  messageIsEmpty(req: Request);
+  messageIsEmpty: (req: Request) => any
 }
+
+export default ILogValidator
