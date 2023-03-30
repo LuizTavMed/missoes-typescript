@@ -1,23 +1,13 @@
-import { Request } from "express";
+import type { Request } from 'express'
 
-class LogValidator{
-    messageIsEmpty(req: Request){
-        if (req.body.message == null){
-            return true
-        }
-        else{
-            return false
-        }
+class LogValidator {
+  messageIsEmpty (req: Request): boolean {
+    if (req.body.message == null) {
+      return true
+    } else {
+      return false
     }
-
-    dateIsEmpty(req: Request){
-        if (req.body.message == null){
-            return true
-        }
-        else{
-            return false
-        }
-    }
+  }
 }
 
 export default LogValidator
