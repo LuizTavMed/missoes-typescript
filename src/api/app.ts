@@ -1,11 +1,13 @@
-// importando .env
-// importando rotas
-import logRoutes from './route/logRoutes'
 
+// importando .env
+
+// importando rotas
 // importando core da api
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
+import LogRouter from './router/LogRouter'
+import type ILogController from './interface/ILogController'
 
 require('dotenv-safe').config({ silent: true })
 
@@ -18,6 +20,7 @@ app.use(express.json())
 app.use(cors())
 
 // utilizando rotas da api
-app.use('/api', logRoutes)
+const logRouter = new LogRouter(logController, routes)
+app.use('/api', logRouter.routes)
 
 export default app

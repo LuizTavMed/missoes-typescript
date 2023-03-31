@@ -1,8 +1,8 @@
-import type { Request } from 'express'
+import type ILogValidator from '../interface/ILogValidator'
 
-class LogValidator {
-  messageIsEmpty (req: Request): boolean {
-    if (req.body.message == null) {
+class LogValidator implements ILogValidator {
+  messageIsEmpty (message: string): boolean {
+    if (message == null) {
       return true
     } else {
       return false

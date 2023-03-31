@@ -1,10 +1,7 @@
 import { type Request, type Response } from 'express'
 
-import LogValidator from '../validator/logValidator'
-
-import LogService from '../repository/LogRepository'
-const logValidator = new LogValidator()
-const logService = new LogService()
+import type ILogRepository from '../interface/ILogRepository'
+import type ILogValidator from '../interface/ILogValidator'
 
 enum LogError {
   USER_INVALID_REQUEST = 'A requisição inserida foi considerada inválida',
@@ -14,19 +11,26 @@ enum LogError {
   USER_NOT_DELETED = 'Não foi possível deletar este usuário',
 }
 class LogController {
-  async create (req: Request, res: Response) {
+  constructor (private readonly logRepository: ILogRepository, private readonly logValidator: ILogValidator) {
+    this.logRepository = logRepository
+    this.logValidator = logValidator
+  }
+
+  async create (req: Request, res: Response): Promise<void> {
     try {
-      const log = await logService.create(req)
-      res.status(200).json(log)
+      if (!this.logValidator.messageIsEmpty(req.body.message)) {
+        const log = await this.logRepository.create(req.body.message)
+        res.status(200).json(log)
+      }
     } catch (erro) {
       console.error(erro)
       res.status(400).send(LogError.USER_INVALID_REQUEST)
     }
   }
 
-  async getAll (req: Request, res: Response) {
+  async getAll (req: Request, res: Response): Promise<void> {
     try {
-      const listaLogs = await logService.getAll()
+      const listaLogs = await this.logRepository.getAll()
       res.status(200).json(listaLogs)
     } catch (erro) {
       console.error(erro)
@@ -34,9 +38,9 @@ class LogController {
     }
   }
 
-  async get (req: Request, res: Response) {
+  async get (req: Request, res: Response): Promise<void> {
     try {
-      const log = await logService.get(req)
+      const log = await this.logRepository.get(req)
       if (log != null) {
         res.status(200).json(log)
       } else {
@@ -47,10 +51,10 @@ class LogController {
     }
   }
 
-  async update (req: Request, res: Response) {
+  async update (req: Request, res: Response): Promise<void> {
     try {
-      const log = await logService.update(req)
-      if (log != undefined) {
+      const log = await this.logRepository.update(req)
+      if (log !== undefined) {
         res.status(200).json(log)
       } else {
         res.status(404).send(LogError.USER_NOT_UPDATED)
@@ -61,9 +65,9 @@ class LogController {
     }
   }
 
-  async delete (req: Request, res: Response) {
+  async delete (req: Request, res: Response): Promise<void> {
     try {
-      const log = await logService.delete(req)
+      const log = await this.logRepository.delete(req)
       if (log != null) {
         res.status(200).json(log)
       } else {
