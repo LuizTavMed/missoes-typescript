@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm'
 
 // importando entidades do banco
 
-import Log from '../api/model/Log'
+import Log from '../api/entity/LogEntity'
 
 const dataSource = new DataSource({
   type: 'mysql',
