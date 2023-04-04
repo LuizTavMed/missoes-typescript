@@ -2,8 +2,7 @@
   "scripts": {
     "server": "ts-node src/index.ts",
     "test": "jest",
-    "lint": "npx eslint ./src/index.ts",
-    "lint -f": "eslint --fix --ext .ts."
+    "lint": "npx eslint ./src/index.ts --fix"
   },
   "dependencies": {
     "@typescript-eslint/parser": "^5.57.0",

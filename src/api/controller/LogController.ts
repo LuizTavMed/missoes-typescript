@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express'
 
+import type ILogController from '../interface/ILogController'
 import type ILogRepository from '../interface/ILogRepository'
 import type ILogValidator from '../interface/ILogValidator'
 
@@ -10,7 +11,7 @@ enum LogError {
   USER_NOT_UPDATED = 'Não foi possível atualizar este usuário',
   USER_NOT_DELETED = 'Não foi possível deletar este usuário',
 }
-class LogController {
+class LogController implements ILogController {
   constructor (private readonly logRepository: ILogRepository, private readonly logValidator: ILogValidator) {
     this.logRepository = logRepository
     this.logValidator = logValidator

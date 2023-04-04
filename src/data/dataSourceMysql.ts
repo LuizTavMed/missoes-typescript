@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm'
 
 import Log from '../api/entity/LogEntity'
 
-const dataSource = new DataSource({
+const dataSourceMysql = new DataSource({
   type: 'mysql',
   database: 'police-station',
   host: process.env.HOST_DATABASE,
@@ -20,4 +20,4 @@ const dataSource = new DataSource({
   subscribers: []
 })
 
-export default dataSource
+export default dataSourceMysql

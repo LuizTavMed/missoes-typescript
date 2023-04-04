@@ -1,26 +1,28 @@
+// importando interfaces
+import type IApp from './interface/IApp'
+import type ILogRouter from './interface/ILogRouter'
 
-// importando .env
+// importando tipos
+import type { Express } from 'express'
 
-// importando rotas
-// importando core da api
+// importando middlewares
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
-import LogRouter from './router/LogRouter'
-import type ILogController from './interface/ILogController'
 
+// importando .env
 require('dotenv-safe').config({ silent: true })
 
-// criando o app
-const app = express()
+class App implements IApp {
+  readonly express: Express
+  constructor (readonly logRouter: ILogRouter) {
+    this.express = express()
+    this.logRouter = logRouter
+    this.express.use(bodyParser.json())
+    this.express.use(express.json())
+    this.express.use(cors())
+    this.express.use('/api', logRouter.routes)
+  }
+}
 
-// aplicando middlewares
-app.use(bodyParser.json())
-app.use(express.json())
-app.use(cors())
-
-// utilizando rotas da api
-const logRouter = new LogRouter(logController, routes)
-app.use('/api', logRouter.routes)
-
-export default app
+export default App

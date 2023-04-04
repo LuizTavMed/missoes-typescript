@@ -5,7 +5,7 @@ import { type Request } from 'express'
 import Log from '../entity/LogEntity'
 import type ILogRepository from '../interface/ILogRepository'
 
-import dataSource from '../../db/dataSource'
+import dataSource from '../../data/dataSourceMysql'
 const logDataSource = dataSource.getRepository(Log)
 
 class LogRepository implements ILogRepository {
