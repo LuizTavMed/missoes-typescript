@@ -6,7 +6,9 @@ import LogController from './api/controller/LogController'
 import LogRepository from './api/repository/LogRepository'
 import LogValidator from './api/validator/logValidator'
 
-// 
+// importando .env
+import * as dotenv from 'dotenv-safe'
+dotenv.config()
 
 // instanciando classes
 const logRepository = new LogRepository()

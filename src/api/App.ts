@@ -10,9 +10,6 @@ import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 
-// importando .env
-require('dotenv-safe').config({ silent: true })
-
 class App implements IApp {
   readonly express: Express
   constructor (readonly logRouter: ILogRouter) {

@@ -12,7 +12,7 @@ enum LogError {
   USER_NOT_DELETED = 'Não foi possível deletar este usuário',
 }
 class LogController implements ILogController {
-  constructor (private readonly logRepository: ILogRepository, private readonly logValidator: ILogValidator) {
+  constructor (readonly logRepository: ILogRepository, readonly logValidator: ILogValidator) {
     this.logRepository = logRepository
     this.logValidator = logValidator
   }

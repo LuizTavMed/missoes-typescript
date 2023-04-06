@@ -6,11 +6,11 @@ interface ILogController {
   readonly logRepository: ILogRepository
   readonly logValidator: ILogValidator
 
-  create: (req: Request, res: Response) => Response
-  getAll: (req: Request, res: Response) => Response
-  get: (req: Request, res: Response) => Response
-  update: (req: Request, res: Response) => Response
-  delete: (req: Request, res: Response) => Response
+  create: (req: Request, res: Response) => Promise<void>
+  getAll: (req: Request, res: Response) => Promise<void>
+  get: (req: Request, res: Response) => Promise<void>
+  update: (req: Request, res: Response) => Promise<void>
+  delete: (req: Request, res: Response) => Promise<void>
 }
 
 export default ILogController
