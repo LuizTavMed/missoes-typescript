@@ -1,6 +1,6 @@
 // importando classes
 import App from './api/App'
-import dataSource from './data/dataSourceMysql'
+import Mariadb from './data/Mariadb'
 import LogRouter from './api/router/LogRouter'
 import LogController from './api/controller/LogController'
 import LogRepository from './api/repository/LogRepository'
@@ -15,8 +15,8 @@ const logRepository = new LogRepository()
 const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
 const logRouter = new LogRouter(logController)
-
-void dataSource.initialize().then(() => {
+const mariadb = new Mariadb()
+void mariadb.dataSource.initialize().then(() => {
   const app = new App(logRouter)
   console.log('banco de dados inicializado')
   app.express.listen(process.env.PORT_API, () => {
