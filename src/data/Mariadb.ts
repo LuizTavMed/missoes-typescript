@@ -24,6 +24,12 @@ class Mariadb implements IDatabase {
       subscribers: []
     })
   }
+
+  async start (): Promise<boolean> {
+    const result = await this.dataSource.initialize()
+    console.log(result)
+    return true
+  }
 }
 
 export default Mariadb
