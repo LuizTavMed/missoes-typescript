@@ -25,14 +25,12 @@ class Mariadb implements IDatabase {
     })
   }
 
-  async start (): Promise<boolean> {
-    try {
-      await this.dataSource.initialize()
-      return true
-    } catch (error) {
-      console.error(error)
-      return false
-    }
+  async start (): Promise<void> {
+    await this.dataSource.initialize()
+  }
+
+  isInitialized (): boolean {
+    return this.dataSource.isInitialized
   }
 }
 

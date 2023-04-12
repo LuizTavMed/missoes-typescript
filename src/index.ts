@@ -17,7 +17,8 @@ const logRepository = new LogRepository(mariadb.dataSource, LogEntity)
 const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
 const logRouter = new LogRouter(logController)
-
-void mariadb.start()
 const app = new App(logRouter)
-app.start()
+
+// iniciando banco de dados e app
+void mariadb.start()
+void app.start()

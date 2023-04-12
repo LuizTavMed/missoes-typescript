@@ -12,6 +12,7 @@ import * as cors from 'cors'
 
 class App implements IApp {
   readonly express: Express
+  hasStarted: boolean = false
 
   constructor (readonly logRouter: ILogRouter) {
     this.express = express()
@@ -22,11 +23,15 @@ class App implements IApp {
     this.express.use('/api', logRouter.routes)
   }
 
-  start (): boolean {
-    this.express.listen(process.env.PORT_API, () => {
-      console.log('aplicação iniciada na porta ', process.env.PORT_API)
-    })
-    return true
+  start (): void {
+    try {
+      this.express.listen(process.env.PORT_API, () => {
+        console.log('aplicação iniciada na porta ', process.env.PORT_API)
+        this.hasStarted = true
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
