@@ -18,11 +18,6 @@ const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
 const logRouter = new LogRouter(logController)
 
-void mariadb.dataSource.initialize().then(() => {
-  const app = new App(logRouter)
-  console.log('banco de dados inicializado')
-  app.express.listen(process.env.PORT_API, () => {
-    console.log('aplicação iniciada na porta ', process.env.PORT_API)
-  })
-}
-)
+void mariadb.start()
+const app = new App(logRouter)
+app.start()

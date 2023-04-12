@@ -12,6 +12,7 @@ import * as cors from 'cors'
 
 class App implements IApp {
   readonly express: Express
+
   constructor (readonly logRouter: ILogRouter) {
     this.express = express()
     this.logRouter = logRouter
@@ -19,6 +20,13 @@ class App implements IApp {
     this.express.use(express.json())
     this.express.use(cors())
     this.express.use('/api', logRouter.routes)
+  }
+
+  start (): boolean {
+    this.express.listen(process.env.PORT_API, () => {
+      console.log('aplicação iniciada na porta ', process.env.PORT_API)
+    })
+    return true
   }
 }
 

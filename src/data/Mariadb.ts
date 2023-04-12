@@ -26,9 +26,13 @@ class Mariadb implements IDatabase {
   }
 
   async start (): Promise<boolean> {
-    const result = await this.dataSource.initialize()
-    console.log(result)
-    return true
+    try {
+      await this.dataSource.initialize()
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
+    }
   }
 }
 
