@@ -14,8 +14,8 @@ class LogRepository implements ILogRepository {
     this.resource = dataSource.getRepository(logEntity)
   }
 
-  async create (req: Request): Promise<Log> {
-    const log = new Log(getDateNow(), req.body.message)
+  async create (message: string): Promise<Log> {
+    const log = new Log(getDateNow(), message)
     await this.resource.save(log)
     return log
   }
@@ -39,7 +39,7 @@ class LogRepository implements ILogRepository {
     if (log[0] === undefined) {
       return log[0]
     }
-    if (req.body.evento !== undefined) {
+    if (req.body.message !== undefined) {
       log[0].message = req.body.message
     }
     if (req.body.data !== undefined) {

@@ -4,7 +4,7 @@ import type { Request } from 'express'
 interface LogRepository {
   readonly resource: Repository<ObjectLiteral>
 
-  create: (req: Request) => Promise<ObjectLiteral>
+  create: (message: string) => Promise<ObjectLiteral>
   getAll: () => Promise<ObjectLiteral[] | null>
   get: (req: Request) => Promise<ObjectLiteral | null>
   update: (req: Request) => Promise<ObjectLiteral | null>
