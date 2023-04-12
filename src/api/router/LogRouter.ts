@@ -11,7 +11,6 @@ import type ILogRouter from '../interface/ILogRouter'
 class LogRouter implements ILogRouter {
   readonly routes: Router
   constructor (readonly logController: ILogController) {
-    // this.logController = logControlle
     this.routes = express.Router()
     this.routes.post('/logs', (req: Request, res: Response) => {
       void logController.create(req, res)
