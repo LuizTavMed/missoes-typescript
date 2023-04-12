@@ -21,4 +21,4 @@ const app = new App(logRouter)
 
 // iniciando banco de dados e app
 void mariadb.start()
-void app.start()
+app.start()

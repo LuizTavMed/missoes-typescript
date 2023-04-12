@@ -6,14 +6,14 @@ import { DataSource } from 'typeorm'
 import Log from '../api/entity/LogEntity'
 import type IDatabase from '../api/interface/IDatabase'
 
-class Mariadb implements IDatabase {
+class MariadbTest implements IDatabase {
   dataSource: DataSource
   isInitialized: boolean
 
   constructor () {
     this.dataSource = new DataSource({
       type: 'mysql',
-      database: 'log-database',
+      database: 'test-database',
       host: 'localhost',
       username: 'root',
       password: 'mariadb',
@@ -41,4 +41,4 @@ class Mariadb implements IDatabase {
   }
 }
 
-export default Mariadb
+export default MariadbTest

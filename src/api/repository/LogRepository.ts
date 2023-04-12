@@ -25,10 +25,8 @@ class LogRepository implements ILogRepository {
     return listaTodosLogs
   }
 
-  async get (req: Request): Promise<ObjectLiteral | null> {
-    const log = await this.resource.findBy({
-      id: parseInt(req.params.id)
-    })
+  async get (id: number): Promise<ObjectLiteral | null> {
+    const log = await this.resource.findBy({ id })
     return log[0]
   }
 
