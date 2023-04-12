@@ -1,19 +1,17 @@
 import getDateNow from '../../helper/getDateNow'
 
-import type { Repository, ObjectLiteral, DataSource } from 'typeorm'
+import type { Repository, EntityTarget, ObjectLiteral, DataSource } from 'typeorm'
 
 import { type Request } from 'express'
 
 import Log from '../entity/LogEntity'
 import type ILogRepository from '../interface/ILogRepository'
 
-import type LogEntity from '../entity/LogEntity'
-
 class LogRepository implements ILogRepository {
   readonly resource: Repository<ObjectLiteral>
 
-  constructor (dataSource: DataSource, logEntity: LogEntity) {
-    this.resource = dataSource.getRepository(Log)
+  constructor (dataSource: DataSource, logEntity: EntityTarget<ObjectLiteral>) {
+    this.resource = dataSource.getRepository(logEntity)
   }
 
   async create (req: Request): Promise<Log> {
@@ -22,19 +20,19 @@ class LogRepository implements ILogRepository {
     return log
   }
 
-  async getAll (): Promise<Log[] | null> {
+  async getAll (): Promise<ObjectLiteral[] | null> {
     const listaTodosLogs = await this.resource.find()
     return listaTodosLogs
   }
 
-  async get (req: Request): Promise<Log | null> {
+  async get (req: Request): Promise<ObjectLiteral | null> {
     const log = await this.resource.findBy({
       id: parseInt(req.params.id)
     })
     return log[0]
   }
 
-  async update (req: Request): Promise<Log[] | Log> {
+  async update (req: Request): Promise<ObjectLiteral | Log> {
     const log = await this.resource.findBy({
       id: parseInt(req.params.id)
     })
@@ -51,7 +49,7 @@ class LogRepository implements ILogRepository {
     return log[0]
   }
 
-  async delete (req: Request): Promise<Log | Log> {
+  async delete (req: Request): Promise<ObjectLiteral | null> {
     const log = await this.resource.findBy({
       id: parseInt(req.params.id)
     })
