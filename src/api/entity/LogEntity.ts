@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import type ILog from '../interface/ILog'
 
 @Entity()
-class LogEntity {
+class LogEntity implements ILog {
   constructor (date: string, message: string) {
     this.date = date
     this.message = message
