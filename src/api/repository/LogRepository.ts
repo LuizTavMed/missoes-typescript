@@ -2,7 +2,8 @@ import getDateNow from '../../helper/getDateNow'
 
 import type { Repository, EntityTarget, ObjectLiteral, DataSource } from 'typeorm'
 
-import Log from '../entity/LogEntity'
+import type ILog from '../interface/ILog'
+
 import type ILogRepository from '../interface/ILogRepository'
 
 class LogRepository implements ILogRepository {
@@ -12,8 +13,9 @@ class LogRepository implements ILogRepository {
     this.resource = dataSource.getRepository(logEntity)
   }
 
-  async create (message: string): Promise<Log> {
-    const log = new Log(getDateNow(), message)
+  async create (message: string): Promise<ObjectLiteral> {
+    const date = getDateNow()
+    const log: ILog = { date, message }
     await this.resource.save(log)
     return log
   }
@@ -28,7 +30,7 @@ class LogRepository implements ILogRepository {
     return log[0]
   }
 
-  async update (id: number, body: ObjectLiteral): Promise<ObjectLiteral | Log> {
+  async update (id: number, body: ObjectLiteral): Promise<ObjectLiteral | ObjectLiteral> {
     const log = await this.resource.findBy({ id })
     if (log[0] === undefined) {
       return log[0]
