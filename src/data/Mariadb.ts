@@ -4,6 +4,8 @@ import { DataSource } from 'typeorm'
 // importando entidades do banco
 
 import LogEntity from '../api/entity/LogEntity'
+import UserEntity from '../api/entity/UserEntity'
+
 import type IDatabase from '../api/interface/IDatabase'
 
 class Mariadb implements IDatabase {
@@ -13,14 +15,14 @@ class Mariadb implements IDatabase {
   constructor () {
     this.dataSource = new DataSource({
       type: 'mysql',
-      database: 'log-database',
+      database: 'user-log',
       host: 'localhost',
       username: 'root',
       password: 'mariadb',
       port: 3306,
       synchronize: true,
       logging: false,
-      entities: [LogEntity],
+      entities: [LogEntity, UserEntity],
       migrations: [],
       subscribers: []
     })
@@ -29,6 +31,7 @@ class Mariadb implements IDatabase {
 
   async start (): Promise<void> {
     try {
+      console.log('Banco de dados inicializado')
       await this.dataSource.initialize()
       this.isInitialized = true
     } catch (error) {

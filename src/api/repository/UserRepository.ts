@@ -1,13 +1,15 @@
 import type { Repository, EntityTarget, ObjectLiteral, DataSource } from 'typeorm'
 
 import type IUserRepository from '../interface/IUserRepository'
+
+import UserEntity from '../entity/UserEntity'
 import type IUser from '../interface/IUser'
 
 class UserRepository implements IUserRepository {
   readonly resource: Repository<ObjectLiteral>
 
   constructor (dataSource: DataSource, userEntity: EntityTarget<ObjectLiteral>) {
-    this.resource = dataSource.getRepository(userEntity)
+    this.resource = dataSource.getRepository(UserEntity)
   }
 
   async create (login: string, password: string, permission: string): Promise<ObjectLiteral> {
