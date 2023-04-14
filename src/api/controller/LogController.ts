@@ -5,11 +5,11 @@ import type ILogRepository from '../interface/ILogRepository'
 import type ILogValidator from '../interface/ILogValidator'
 
 enum LogError {
-  USER_INVALID_REQUEST = 'A requisição inserida foi considerada inválida',
-  USER_LIST_ERROR = 'Houve um erro quando tentamos buscar a lista',
-  USER_NOT_FOUND = 'Não foi possível encontrar este usuário',
-  USER_NOT_UPDATED = 'Não foi possível atualizar este usuário',
-  USER_NOT_DELETED = 'Não foi possível deletar este usuário',
+  LOG_INVALID_REQUEST = 'A requisição inserida foi considerada inválida',
+  LOG_LIST_ERROR = 'Houve um erro quando tentamos buscar a lista',
+  LOG_NOT_FOUND = 'Não foi possível encontrar este usuário',
+  LOG_NOT_UPDATED = 'Não foi possível atualizar este usuário',
+  LOG_NOT_DELETED = 'Não foi possível deletar este usuário',
 }
 class LogController implements ILogController {
   constructor (readonly logRepository: ILogRepository, readonly logValidator: ILogValidator) {
@@ -25,7 +25,7 @@ class LogController implements ILogController {
       }
     } catch (erro) {
       console.error(erro)
-      res.status(400).send(LogError.USER_INVALID_REQUEST)
+      res.status(400).send(LogError.LOG_INVALID_REQUEST)
     }
   }
 
@@ -35,7 +35,7 @@ class LogController implements ILogController {
       res.status(200).json(listaLogs)
     } catch (erro) {
       console.error(erro)
-      res.status(400).send(LogError.USER_INVALID_REQUEST)
+      res.status(400).send(LogError.LOG_INVALID_REQUEST)
     }
   }
 
@@ -45,10 +45,10 @@ class LogController implements ILogController {
       if (log != null) {
         res.status(200).json(log)
       } else {
-        res.status(404).send(LogError.USER_NOT_FOUND)
+        res.status(404).send(LogError.LOG_NOT_FOUND)
       }
     } catch (erro) {
-      res.status(400).send(LogError.USER_INVALID_REQUEST)
+      res.status(400).send(LogError.LOG_INVALID_REQUEST)
     }
   }
 
@@ -58,11 +58,11 @@ class LogController implements ILogController {
       if (log !== undefined) {
         res.status(200).json(log)
       } else {
-        res.status(404).send(LogError.USER_NOT_UPDATED)
+        res.status(404).send(LogError.LOG_NOT_UPDATED)
       }
     } catch (erro) {
       console.log(erro)
-      res.status(400).send(LogError.USER_INVALID_REQUEST)
+      res.status(400).send(LogError.LOG_INVALID_REQUEST)
     }
   }
 
@@ -72,11 +72,11 @@ class LogController implements ILogController {
       if (log != null) {
         res.status(200).json(log)
       } else {
-        res.status(404).send(LogError.USER_NOT_DELETED)
+        res.status(404).send(LogError.LOG_NOT_DELETED)
       }
     } catch (erro) {
       console.error(erro)
-      res.status(400).send(LogError.USER_INVALID_REQUEST)
+      res.status(400).send(LogError.LOG_INVALID_REQUEST)
     }
   }
 }
