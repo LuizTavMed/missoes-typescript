@@ -1,14 +1,13 @@
-Caso 0: conexão com o banco
-    0- é possível se conectar ao banco
+Usuários
+    obter lista de usuários
+    Cadastrar usuário
+    obter usuário por id
+    atualizar permissao do usuário
+    atualizar senha do usuário
+    remover usuário
 
-Caso 1: inserção de log 
-    0- envio de log perfeito deve ser validado
-    1- envio de log sem data não deve ser validado
-    2- envio de log sem mensagem não deve ser validado
-    
-Caso 2: obtenção de lista de logs
-    0- lista de logs é exibida ao usuário
-
-Caso 3: obtenção de log específico
-    0- log existente é exibido ao usuário
-        
+Logs
+    obter lista de logs
+    Cadastrar log
+    obter log por id
+    toda vez que uma alteração no banco de dados for feita deve-se registrar na tabela de logs
