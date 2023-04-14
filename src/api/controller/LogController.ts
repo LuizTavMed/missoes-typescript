@@ -41,7 +41,7 @@ class LogController implements ILogController {
 
   async get (req: Request, res: Response): Promise<void> {
     try {
-      const log = await this.logRepository.get(req.params.id)
+      const log = await this.logRepository.get(parseInt(req.params.id))
       if (log != null) {
         res.status(200).json(log)
       } else {
@@ -54,7 +54,7 @@ class LogController implements ILogController {
 
   async update (req: Request, res: Response): Promise<void> {
     try {
-      const log = await this.logRepository.update(req)
+      const log = await this.logRepository.update(parseInt(req.params.id), req.body)
       if (log !== undefined) {
         res.status(200).json(log)
       } else {
@@ -68,7 +68,7 @@ class LogController implements ILogController {
 
   async delete (req: Request, res: Response): Promise<void> {
     try {
-      const log = await this.logRepository.delete(req)
+      const log = await this.logRepository.delete(parseInt(req.params.id))
       if (log != null) {
         res.status(200).json(log)
       } else {
