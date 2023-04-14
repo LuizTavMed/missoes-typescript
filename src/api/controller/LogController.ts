@@ -41,7 +41,7 @@ class LogController implements ILogController {
 
   async get (req: Request, res: Response): Promise<void> {
     try {
-      const log = await this.logRepository.get(req)
+      const log = await this.logRepository.get(req.params.id)
       if (log != null) {
         res.status(200).json(log)
       } else {

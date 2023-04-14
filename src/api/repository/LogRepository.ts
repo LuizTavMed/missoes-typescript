@@ -2,8 +2,6 @@ import getDateNow from '../../helper/getDateNow'
 
 import type { Repository, EntityTarget, ObjectLiteral, DataSource } from 'typeorm'
 
-import { type Request } from 'express'
-
 import Log from '../entity/LogEntity'
 import type ILogRepository from '../interface/ILogRepository'
 
@@ -30,27 +28,23 @@ class LogRepository implements ILogRepository {
     return log[0]
   }
 
-  async update (req: Request): Promise<ObjectLiteral | Log> {
-    const log = await this.resource.findBy({
-      id: parseInt(req.params.id)
-    })
+  async update (id: number, body: ObjectLiteral): Promise<ObjectLiteral | Log> {
+    const log = await this.resource.findBy({ id })
     if (log[0] === undefined) {
       return log[0]
     }
-    if (req.body.message !== undefined) {
-      log[0].message = req.body.message
+    if (body.message !== undefined) {
+      log[0].message = body.message
     }
-    if (req.body.data !== undefined) {
-      log[0].date = req.body.date
+    if (body.date !== undefined) {
+      log[0].date = body.date
     }
     await this.resource.save(log[0])
     return log[0]
   }
 
-  async delete (req: Request): Promise<ObjectLiteral | null> {
-    const log = await this.resource.findBy({
-      id: parseInt(req.params.id)
-    })
+  async delete (id: number): Promise<ObjectLiteral | null> {
+    const log = await this.resource.findBy({ id })
     if (log[0] === undefined) {
       return log[0]
     } else {
