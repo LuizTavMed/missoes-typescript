@@ -1,6 +1,6 @@
 import type { Repository, ObjectLiteral } from 'typeorm'
 
-interface UserRepository {
+interface IUserRepository {
   readonly resource: Repository<ObjectLiteral>
 
   create: (login: string, password: string, permission: string) => Promise<ObjectLiteral>
@@ -10,4 +10,4 @@ interface UserRepository {
   delete: (id: number) => Promise<ObjectLiteral | null>
 }
 
-export default UserRepository
+export default IUserRepository
