@@ -10,6 +10,6 @@ const logRepository = new LogRepository(mariadbTest.dataSource, LogEntity)
 
 test('Testando repositório de Log', async () => {
   await mariadbTest.start()
-  expect(await logRepository.getAll()).toBe([])
-  await logRepository.create('testando novo log')
+  expect(await logRepository.getAll()).toStrictEqual([])
+  await mariadbTest.stop()
 })
