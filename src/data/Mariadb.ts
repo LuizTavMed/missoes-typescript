@@ -19,7 +19,7 @@ class Mariadb implements IDatabase {
       password: 'mariadb',
       port: 3306,
       synchronize: true,
-      logging: true,
+      logging: false,
       entities: [Log],
       migrations: [],
       subscribers: []
