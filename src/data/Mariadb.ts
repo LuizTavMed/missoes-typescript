@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm'
 
 // importando entidades do banco
 
-import Log from '../api/entity/LogEntity'
+import LogEntity from '../api/entity/LogEntity'
 import type IDatabase from '../api/interface/IDatabase'
 
 class Mariadb implements IDatabase {
@@ -20,7 +20,7 @@ class Mariadb implements IDatabase {
       port: 3306,
       synchronize: true,
       logging: false,
-      entities: [Log],
+      entities: [LogEntity],
       migrations: [],
       subscribers: []
     })
