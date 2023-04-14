@@ -1,9 +1,6 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 
-// importando entidades do banco
-
-import LogEntity from '../api/entity/LogEntity'
 import UserEntity from '../api/entity/UserEntity'
 
 import type IDatabase from '../api/interface/IDatabase'
@@ -21,8 +18,8 @@ class Mariadb implements IDatabase {
       password: 'mariadb',
       port: 3306,
       synchronize: true,
-      logging: false,
-      entities: [LogEntity, UserEntity],
+      logging: true,
+      entities: ['user', 'log'],
       migrations: [],
       subscribers: []
     })

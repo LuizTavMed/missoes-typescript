@@ -1,16 +1,13 @@
 import 'reflect-metadata'
-import { DataSource } from 'typeorm'
+import { DataSource, type EntitySchema } from 'typeorm'
 
-// importando entidades do banco
-
-import LogEntity from '../api/entity/LogEntity'
 import type IDatabase from '../api/interface/IDatabase'
 
 class MariadbTest implements IDatabase {
   dataSource: DataSource
   isInitialized: boolean
 
-  constructor () {
+  constructor (entityList: [EntitySchema]) {
     this.dataSource = new DataSource({
       type: 'mysql',
       database: 'test',
@@ -20,7 +17,7 @@ class MariadbTest implements IDatabase {
       port: 3306,
       synchronize: false,
       logging: false,
-      entities: [LogEntity],
+      entities: entityList,
       migrations: [],
       subscribers: []
     })

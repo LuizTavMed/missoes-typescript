@@ -1,8 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import type IUser from '../interface/IUser'
 
 @Entity()
-class LogEntity implements IUser {
+class LogEntity {
   constructor (login: string, password: string, permission: string) {
     this.login = login
     this.password = password
