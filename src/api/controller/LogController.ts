@@ -29,7 +29,7 @@ class LogController implements ILogController {
     }
   }
 
-  async getAll (req: Request, res: Response): Promise<void> {
+  async getAll (res: Response): Promise<void> {
     try {
       const listaLogs = await this.logRepository.getAll()
       res.status(200).json(listaLogs)
