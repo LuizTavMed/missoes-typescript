@@ -1,5 +1,8 @@
 import 'reflect-metadata'
-import { DataSource, type EntitySchema } from 'typeorm'
+import { DataSource } from 'typeorm'
+
+import type LogEntity from '../api/entity/LogEntity'
+import type UserEntity from '../api/entity/UserEntity'
 
 import type IDatabase from '../api/interface/IDatabase'
 
@@ -7,7 +10,7 @@ class MariadbTest implements IDatabase {
   dataSource: DataSource
   isInitialized: boolean
 
-  constructor (entityList: [EntitySchema]) {
+  constructor (entityList: Array<typeof LogEntity | typeof UserEntity>) {
     this.dataSource = new DataSource({
       type: 'mysql',
       database: 'test',
