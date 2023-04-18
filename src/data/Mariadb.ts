@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 
 import UserEntity from '../api/entity/UserEntity'
+import LogEntity from '../api/entity/LogEntity'
 
 import type IDatabase from '../api/interface/IDatabase'
 
@@ -12,14 +13,14 @@ class Mariadb implements IDatabase {
   constructor () {
     this.dataSource = new DataSource({
       type: 'mysql',
-      database: 'user-log',
+      database: 'intranet',
       host: 'localhost',
       username: 'root',
       password: 'mariadb',
       port: 3306,
       synchronize: true,
       logging: true,
-      entities: ['user', 'log'],
+      entities: [LogEntity, UserEntity],
       migrations: [],
       subscribers: []
     })

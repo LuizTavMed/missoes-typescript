@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @Entity()
-class LogEntity {
+class UserEntity {
   constructor (login: string, password: string, permission: string) {
     this.login = login
     this.password = password
@@ -21,4 +21,4 @@ class LogEntity {
     permission!: string
 }
 
-export default LogEntity
+export default UserEntity
