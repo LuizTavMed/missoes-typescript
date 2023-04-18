@@ -16,8 +16,7 @@ import UserEntity from './api/entity/UserEntity'
 import * as dotenv from 'dotenv-safe'
 
 // instanciando classe
-const entityList = [LogEntity, UserEntity]
-const mariadb = new Mariadb(entityList)
+const mariadb = new Mariadb([LogEntity, UserEntity])
 const logRepository = new LogRepository(mariadb.dataSource, LogEntity)
 const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
