@@ -17,7 +17,8 @@ import * as dotenv from 'dotenv-safe'
 dotenv.config()
 
 // instanciando classe
-const mariadb = new Mariadb()
+const entityList = [LogEntity, UserEntity]
+const mariadb = new Mariadb(entityList)
 const logRepository = new LogRepository(mariadb.dataSource, LogEntity)
 const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
