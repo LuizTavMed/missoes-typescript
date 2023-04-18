@@ -5,6 +5,7 @@
     "lint": "npx eslint ./src/index.ts --fix"
   },
   "dependencies": {
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/parser": "^5.57.0",
     "all": "^0.0.0",
     "body-parser": "^1.20.2",
@@ -13,6 +14,7 @@
     "express": "^4.18.2",
     "mysql2": "^3.2.0",
     "reflect-metadata": "^0.1.13",
+    "supertest": "^6.3.3",
     "typeorm": "^0.3.12"
   },
   "devDependencies": {
