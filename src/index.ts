@@ -14,7 +14,6 @@ import UserEntity from './api/entity/UserEntity'
 
 // importando .env
 import * as dotenv from 'dotenv-safe'
-dotenv.config()
 
 // instanciando classe
 const entityList = [LogEntity, UserEntity]
@@ -30,5 +29,6 @@ const userRouter = new UserRouter(userController)
 const app = new App(logRouter, userRouter)
 
 // iniciando banco de dados e app
+dotenv.config()
 void mariadb.start()
 app.start()
