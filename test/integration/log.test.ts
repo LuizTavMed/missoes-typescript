@@ -12,35 +12,25 @@ import UserRepository from '../../src/api/repository/UserRepository'
 import UserValidator from '../../src/api/validator/UserValidator'
 import UserEntity from '../../src/api/entity/UserEntity'
 
-import request from 'supertest'
+// import * as request from 'supertest'
 import * as dotenv from 'dotenv-safe'
 
-test('Integration test', async () => {
-  const mariadbTest = new MariadbTest([LogEntity, UserEntity])
-  const logRepository = new LogRepository(mariadbTest.dataSource, LogEntity)
-  const logValidator = new LogValidator()
-  const logController = new LogController(logRepository, logValidator)
-  const logRouter = new LogRouter(logController)
-  const userRepository = new UserRepository(mariadbTest.dataSource, UserEntity)
-  const userValidator = new UserValidator()
-  const userController = new UserController(userRepository, userValidator)
-  const userRouter = new UserRouter(userController)
-  const app = new App(logRouter, userRouter)
-  let res = await request(app.express).get('localhost:4000/api/log')
-  console.log('res:', res)
-  res = await request(app.express).post('localhost:4000/api/log')
-  console.log('res:', res)
-  res = await request(app.express).patch('localhost:4000/api/log')
-  console.log('res:', res)
-  res = await request(app.express).delete('localhost:4000/api/log')
-  console.log('res:', res)
-  beforeAll(async () => {
-    dotenv.config()
-    void mariadbTest.start()
-    app.start()
-  })
+const mariadbTest = new MariadbTest([LogEntity, UserEntity])
+const logRepository = new LogRepository(mariadbTest.dataSource, LogEntity)
+const logValidator = new LogValidator()
+const logController = new LogController(logRepository, logValidator)
+const logRouter = new LogRouter(logController)
+const userRepository = new UserRepository(mariadbTest.dataSource, UserEntity)
+const userValidator = new UserValidator()
+const userController = new UserController(userRepository, userValidator)
+const userRouter = new UserRouter(userController)
+const app = new App(logRouter, userRouter)
 
-  afterAll(async () => {
-    void mariadbTest.stop()
-  })
+test('Integration test', async () => {
+  void mariadbTest.start()
+  app.start()
+  dotenv.config()
+  console.log('a')
+  console.log('res:')
+  void mariadbTest.stop()
 })
