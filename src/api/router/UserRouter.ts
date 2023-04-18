@@ -12,19 +12,19 @@ class UserRouter implements IUserRouter {
   readonly routes: Router
   constructor (readonly userController: IUserController) {
     this.routes = express.Router()
-    this.routes.post('/users', (req: Request, res: Response) => {
+    this.routes.post('/user', (req: Request, res: Response) => {
       void userController.create(req, res)
     })
-    this.routes.get('/users', (req: Request, res: Response) => {
+    this.routes.get('/user', (req: Request, res: Response) => {
       void userController.getAll(res)
     })
-    this.routes.get('/users/:id', (req: Request, res: Response) => {
+    this.routes.get('/user/:id', (req: Request, res: Response) => {
       void userController.get(req, res)
     })
-    this.routes.patch('/users/:id', (req: Request, res: Response) => {
+    this.routes.patch('/user/:id', (req: Request, res: Response) => {
       void userController.update(req, res)
     })
-    this.routes.delete('/users/:id', (req: Request, res: Response) => {
+    this.routes.delete('/user/:id', (req: Request, res: Response) => {
       void userController.delete(req, res)
     })
   }

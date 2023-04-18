@@ -12,19 +12,19 @@ class LogRouter implements ILogRouter {
   readonly routes: Router
   constructor (readonly logController: ILogController) {
     this.routes = express.Router()
-    this.routes.post('/logs', (req: Request, res: Response) => {
+    this.routes.post('/log', (req: Request, res: Response) => {
       void logController.create(req, res)
     })
-    this.routes.get('/logs', (req: Request, res: Response) => {
+    this.routes.get('/log', (req: Request, res: Response) => {
       void logController.getAll(res)
     })
-    this.routes.get('/logs/:id', (req: Request, res: Response) => {
+    this.routes.get('/log/:id', (req: Request, res: Response) => {
       void logController.get(req, res)
     })
-    this.routes.patch('/logs/:id', (req: Request, res: Response) => {
+    this.routes.patch('/log/:id', (req: Request, res: Response) => {
       void logController.update(req, res)
     })
-    this.routes.delete('/logs/:id', (req: Request, res: Response) => {
+    this.routes.delete('/log/:id', (req: Request, res: Response) => {
       void logController.delete(req, res)
     })
   }
