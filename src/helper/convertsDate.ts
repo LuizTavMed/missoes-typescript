@@ -1,4 +1,4 @@
-export const converteData = (data: string): string => {
+const convertsDate = (data: string): string => {
   const dataCrua = new Date(data)
   const ano = dataCrua.getFullYear()
   const mes = dataCrua.getMonth() + 1
@@ -6,3 +6,5 @@ export const converteData = (data: string): string => {
   const dataFormatada = dia + '/' + mes + '/' + ano
   return dataFormatada
 }
+
+export default convertsDate
