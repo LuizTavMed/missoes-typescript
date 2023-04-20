@@ -23,21 +23,44 @@ const userRepository = new UserRepository(mariadbTest.dataSource, UserEntity)
 const userValidator = new UserValidator()
 const userController = new UserController(userRepository, userValidator)
 const userRouter = new UserRouter(userController)
-const app = new App(logRouter, userRouter)
 
-test('Log integration test', async () => {
-  app.start()
-  await mariadbTest.start()
-  let res = await request(app.express).get('/api/log')
-  expect(res.status).toEqual(200)
-  expect(res.body).toEqual([])
-  res = await request(app.express).post('/api/log').send({ message: 'test message' })
-  const insertedLog = res.body
-  expect(res.status).toEqual(200)
-  expect(insertedLog.id).toBeDefined()
-  expect(insertedLog.message).toEqual('test message')
-  expect(insertedLog.date).toBeDefined()
-  res = await request(app.express).get('/api/log/', insertedLog.id)
-  expect(res.body).toBeDefined()
-  await mariadbTest.stop()
+describe('Integration test', () => {
+  const app = new App(logRouter, userRouter)
+
+  beforeEach(async () => {
+    app.start()
+    await mariadbTest.start()
+  })
+
+  afterEach(async () => {
+    await mariadbTest.stop()
+    app.stop()
+  })
+
+  test('Should be able to save a log', async () => {
+    const res = await request(app.express).post('/api/log').send({ message: 'test message' })
+    expect(res.status).toEqual(200)
+    expect(res.body.id).toBeDefined()
+    expect(res.body.message).toEqual('test message')
+    expect(res.body.date).toBeDefined()
+  })
+
+  test('Should return all logs from the database in a array', async () => {
+    await request(app.express).post('/api/log').send({ message: 'first log' })
+    await request(app.express).post('/api/log').send({ message: 'second log' })
+    await request(app.express).post('/api/log').send({ message: 'third log' })
+    const res = await request(app.express).get('/api/log/')
+    expect(res.status).toEqual(200)
+    expect(res.body.lenght).toEqual(3)
+  })
+
+  test('Should fetch a specific log', async () => {
+    await request(app.express).post('/api/log').send({ message: 'first log' })
+    let res = await request(app.express).post('/api/log').send({ message: 'second log' })
+    const logToFetch = res.body
+    await request(app.express).post('/api/log').send({ message: 'third log' })
+    res = await request(app.express).get('/api/log/', logToFetch)
+    expect(res.body).toEqual(logToFetch)
+    expect(res.status).toEqual(200)
+  })
 })

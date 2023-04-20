@@ -25,27 +25,74 @@ const userController = new UserController(userRepository, userValidator)
 const userRouter = new UserRouter(userController)
 const app = new App(logRouter, userRouter)
 
+describe('User integration tests', () => {
+  beforeEach(async () => {
+    app.start()
+    await mariadbTest.start()
+  })
+
+  afterEach(async () => {
+    app.stop()
+    await mariadbTest.stop()
+  })
+
+  test('Should create an user', async () => {
+    const res = await request(app.express).post('/api/user').send({
+      login: 'login',
+      password: 'password',
+      permission: 'master'
+    })
+    expect(res.status).toEqual(200)
+    expect(res.body.id).toBeDefined()
+    expect(res.body.login).toEqual('login')
+    expect(res.body.password).toEqual('password')
+    expect(res.body.permission).toEqual('master')
+  })
+})
+
+test('Should fetch a list of users', async () => {
+  await request(app.express).post('/api/user').send({
+    login: 'firstUser',
+    password: '123',
+    permission: 'master'
+  })
+  await request(app.express).post('/api/user').send({
+    login: 'secondUser',
+    password: '456',
+    permission: 'common'
+  })
+  await request(app.express).post('/api/user').send({
+    login: 'firstUser',
+    password: '789',
+    permission: 'advanced'
+  })
+  expect(res.status).toEqual(200)
+  expect(res.body.id).toBeDefined()
+  expect(res.body.login).toEqual('login')
+  expect(res.body.password).toEqual('password')
+  expect(res.body.permission).toEqual('master')
+})
+
 test('Log integration test', async () => {
-  app.start()
   await mariadbTest.start()
   let res = await request(app.express).get('/api/user')
   expect(res.status).toEqual(200)
   expect(res.body).toEqual([])
-  res = await request(app.express).post('/api/user').send({
-    login: 'login',
-    password: 'password',
-    permission: 'master'
-  })
+
   const insertedUser = res.body
   expect(res.status).toEqual(200)
   expect(insertedUser.id).toBeDefined()
-  expect(insertedUser.message).toEqual('test message')
-  expect(insertedUser.date).toBeDefined()
+  expect(insertedUser.login).toEqual('login')
+  expect(insertedUser.password).toEqual('password')
+  expect(insertedUser.permission).toEqual('master')
   res = await request(app.express).get('/api/log/', insertedUser.id)
   expect(res.body).toBeDefined()
+  expect(res.status).toEqual(200)
   res = await request(app.express).patch('/api/user', insertedUser.id)
   expect(res.body).toBeDefined()
+  expect(res.status).toEqual(200)
   res = await request(app.express).delete('/api/user')
   expect(res).toEqual([])
   await mariadbTest.stop()
+  app.stop()
 })
