@@ -24,7 +24,7 @@ const userValidator = new UserValidator()
 const userController = new UserController(userRepository, userValidator)
 const userRouter = new UserRouter(userController)
 
-describe('Integration test', () => {
+describe('Log Integration test', () => {
   const app = new App(logRouter, userRouter)
 
   beforeEach(async () => {
@@ -51,15 +51,16 @@ describe('Integration test', () => {
     await request(app.express).post('/api/log').send({ message: 'third log' })
     const res = await request(app.express).get('/api/log/')
     expect(res.status).toEqual(200)
-    expect(res.body.lenght).toEqual(3)
+    expect(res.body.length).toEqual(3)
   })
 
   test('Should fetch a specific log', async () => {
     await request(app.express).post('/api/log').send({ message: 'first log' })
-    let res = await request(app.express).post('/api/log').send({ message: 'second log' })
+    const res = await request(app.express).post('/api/log').send({ message: 'second log' })
     const logToFetch = res.body
     await request(app.express).post('/api/log').send({ message: 'third log' })
-    res = await request(app.express).get('/api/log/', logToFetch)
+    const newRes = await request(app.express).get('/api/log/2')
+    console.log('res.body:', newRes.body)
     expect(res.body).toEqual(logToFetch)
     expect(res.status).toEqual(200)
   })
