@@ -40,6 +40,7 @@ class MariadbTest implements IDatabase {
     await this.dataSource.dropDatabase()
     await this.dataSource.destroy()
     this.isInitialized = false
+    
   }
 }
 
