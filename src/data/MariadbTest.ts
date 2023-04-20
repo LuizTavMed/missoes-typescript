@@ -5,6 +5,7 @@ import type LogEntity from '../api/entity/LogEntity'
 import type UserEntity from '../api/entity/UserEntity'
 
 import type IDatabase from '../api/interface/IDatabase'
+import config from '../config'
 
 class MariadbTest implements IDatabase {
   dataSource: DataSource
@@ -13,10 +14,10 @@ class MariadbTest implements IDatabase {
   constructor (entityList: Array<typeof LogEntity | typeof UserEntity>) {
     this.dataSource = new DataSource({
       type: 'mysql',
-      database: 'intranet',
-      host: 'localhost',
-      username: 'root',
-      password: 'mariadb',
+      database: config.mariadb.testDatabase,
+      host: config.mariadb.host,
+      username: config.mariadb.username,
+      password: config.mariadb.password,
       port: 3306,
       synchronize: true,
       logging: false,
