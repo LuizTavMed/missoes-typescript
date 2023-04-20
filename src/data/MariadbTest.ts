@@ -13,12 +13,12 @@ class MariadbTest implements IDatabase {
   constructor (entityList: Array<typeof LogEntity | typeof UserEntity>) {
     this.dataSource = new DataSource({
       type: 'mysql',
-      database: 'test',
+      database: 'intranet',
       host: 'localhost',
       username: 'root',
       password: 'mariadb',
       port: 3306,
-      synchronize: false,
+      synchronize: true,
       logging: false,
       entities: entityList,
       migrations: [],
@@ -37,6 +37,7 @@ class MariadbTest implements IDatabase {
   }
 
   async stop (): Promise<void> {
+    await this.dataSource.dropDatabase()
     await this.dataSource.destroy()
     this.isInitialized = false
   }
