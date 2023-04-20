@@ -56,12 +56,11 @@ describe('Log Integration test', () => {
 
   test('Should fetch a specific log', async () => {
     await request(app.express).post('/api/log').send({ message: 'first log' })
-    const res = await request(app.express).post('/api/log').send({ message: 'second log' })
-    const logToFetch = res.body
+    const insertedLog = await request(app.express).post('/api/log').send({ message: 'second log' })
+    const log = res.body
     await request(app.express).post('/api/log').send({ message: 'third log' })
-    const newRes = await request(app.express).get('/api/log/2')
-    console.log('res.body:', newRes.body)
-    expect(res.body).toEqual(logToFetch)
+    const fetchedLog = await request(app.express).get(`/api/log/${logId}`)
+    expect(res.body).toEqual(log)
     expect(res.status).toEqual(200)
   })
 })
