@@ -8,6 +8,7 @@ import type { Express } from 'express'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
+import { config } from '../config'
 
 class App implements IApp {
   readonly express: Express
@@ -26,8 +27,16 @@ class App implements IApp {
 
   start (): void {
     try {
-      this.express.listen(process.env.PORT_API)
+      this.express.listen(config.api_port)
       console.log('Servidor inicializado')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  stop (): void {
+    try {
+      console.log('stopping')
     } catch (error) {
       console.error(error)
     }

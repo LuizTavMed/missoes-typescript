@@ -12,8 +12,7 @@ import UserRepository from '../../src/api/repository/UserRepository'
 import UserValidator from '../../src/api/validator/UserValidator'
 import UserEntity from '../../src/api/entity/UserEntity'
 
-// import * as request from 'supertest'
-import * as dotenv from 'dotenv-safe'
+import * as request from 'supertest'
 
 const mariadbTest = new MariadbTest([LogEntity, UserEntity])
 const logRepository = new LogRepository(mariadbTest.dataSource, LogEntity)
@@ -26,11 +25,19 @@ const userController = new UserController(userRepository, userValidator)
 const userRouter = new UserRouter(userController)
 const app = new App(logRouter, userRouter)
 
-test('Integration test', async () => {
-  void mariadbTest.start()
+test('Log integration test', async () => {
   app.start()
-  dotenv.config()
-  console.log('a')
-  console.log('res:')
-  void mariadbTest.stop()
+  await mariadbTest.start()
+  let res = await request(app.express).get('/api/log')
+  expect(res.status).toEqual(200)
+  expect(res.body).toEqual([])
+  res = await request(app.express).post('/api/log').send({ message: 'test message' })
+  const insertedLog = res.body
+  expect(res.status).toEqual(200)
+  expect(insertedLog.id).toBeDefined()
+  expect(insertedLog.message).toEqual('test message')
+  expect(insertedLog.date).toBeDefined()
+  res = await request(app.express).get('/api/log/', insertedLog.id)
+  expect(res.body).toBeDefined()
+  await mariadbTest.stop()
 })
