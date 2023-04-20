@@ -9,7 +9,7 @@ import { Server } from 'http'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
-import { config } from '../config'
+import config from '../config'
 
 class App implements IApp {
   readonly express: Express

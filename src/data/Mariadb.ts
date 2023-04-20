@@ -5,7 +5,7 @@ import type IDatabase from '../api/interface/IDatabase'
 import type LogEntity from '../api/entity/LogEntity'
 import type UserEntity from '../api/entity/UserEntity'
 
-import { config } from '../config'
+import config from '../config'
 
 class Mariadb implements IDatabase {
   dataSource: DataSource
