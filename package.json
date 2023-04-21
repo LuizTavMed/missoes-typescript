@@ -1,7 +1,7 @@
 {
   "scripts": {
     "server": "ts-node src/index.ts",
-    "test": "jest",
+    "test": "jest --runInBand",
     "lint": "npx eslint ./src/index.ts --fix"
   },
   "dependencies": {
