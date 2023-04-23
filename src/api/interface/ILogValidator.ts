@@ -1,5 +1,5 @@
 interface ILogValidator {
-  messageIsEmpty: (message: string) => boolean
+  isValid: (message: string) => boolean
 }
 
 export default ILogValidator

@@ -1,11 +1,13 @@
 import type ILogValidator from '../interface/ILogValidator'
 
 class LogValidator implements ILogValidator {
-  messageIsEmpty (message: string): boolean {
-    if (message == null) {
-      return true
-    } else {
+
+  isValid(message: string): boolean {
+    if (message == '' || message == undefined || message == null){
       return false
+    }
+    else{
+      return true
     }
   }
 }

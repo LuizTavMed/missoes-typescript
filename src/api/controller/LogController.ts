@@ -19,7 +19,7 @@ class LogController implements ILogController {
 
   async create (req: Request, res: Response): Promise<void> {
     try {
-      if (!this.logValidator.messageIsEmpty(req.body.message)) {
+      if (this.logValidator.isValid(req.body.message)) {
         const log = await this.logRepository.create(req.body.message)
         res.status(200).json(log)
       }
