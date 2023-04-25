@@ -1,5 +1,5 @@
 const config = {
-  cryptography:{
+  cryptography: {
     saltRounds: process.env.SALT_ROUNDS_BCRYPT
   },
   api: {
