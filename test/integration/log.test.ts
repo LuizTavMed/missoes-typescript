@@ -58,9 +58,9 @@ describe('Log Integration test', () => {
     await request(app.express).post('/api/log').send({ message: 'first log' })
     let res = await request(app.express).post('/api/log').send({ message: 'second log' })
     const log = res.body
-    let logId: number = log.id
+    const logId: number = log.id
     await request(app.express).post('/api/log').send({ message: 'third log' })
-    const fetchedLog = await request(app.express).get(`/api/log/${logId}`)
+    res = await request(app.express).get(`/api/log/${logId}`)
     expect(res.body).toEqual(log)
     expect(res.status).toEqual(200)
   })
