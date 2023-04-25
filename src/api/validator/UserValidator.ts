@@ -1,7 +1,7 @@
 import type IUserValidator from '../interface/IUserValidator'
 
 class UserValidator implements IUserValidator {
-  isUserValid (login: string, password: string, permission: string): boolean {
+  isUserValid (login: unknown, password: unknown, permission: unknown): boolean {
     console.log(login, password, permission)
     if (this.isLoginEmpty(login) || this.isPasswordsEmpty(password) || this.isPermissionEmpty(permission)) {
       return false
@@ -10,7 +10,7 @@ class UserValidator implements IUserValidator {
     }
   }
 
-  isLoginEmpty (login: string): boolean {
+  isLoginEmpty (login: unknown): boolean {
     if (login == '' || null || undefined) {
       return true
     } else {
@@ -18,7 +18,7 @@ class UserValidator implements IUserValidator {
     }
   }
 
-  isPasswordsEmpty (passwords: string): boolean {
+  isPasswordsEmpty (passwords: unknown): boolean {
     if (passwords == '' || null || undefined) {
       return true
     } else {
@@ -26,7 +26,7 @@ class UserValidator implements IUserValidator {
     }
   }
 
-  isPermissionEmpty (permission: string): boolean {
+  isPermissionEmpty (permission: unknown): boolean {
     if (permission == '' || null || undefined) {
       return true
     } else {
