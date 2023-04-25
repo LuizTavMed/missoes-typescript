@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt'
+import type ICrypto from '../api/interface/ICrypto'
 
-class Crypto {
+class Crypto implements ICrypto {
   async getPasswordHash (passwordToHash: string): Promise<string> {
     return await bcrypt.hash(passwordToHash, 10)
   }
