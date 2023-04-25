@@ -11,7 +11,7 @@ class UserValidator implements IUserValidator {
   }
 
   isLoginEmpty (login: unknown): boolean {
-    if (login == '' || null || undefined) {
+    if (login === '' || login === null || login === undefined) {
       return true
     } else {
       return false
@@ -19,7 +19,7 @@ class UserValidator implements IUserValidator {
   }
 
   isPasswordsEmpty (passwords: unknown): boolean {
-    if (passwords == '' || null || undefined) {
+    if (passwords === '' || passwords === null || passwords === undefined) {
       return true
     } else {
       return false
@@ -27,7 +27,7 @@ class UserValidator implements IUserValidator {
   }
 
   isPermissionEmpty (permission: unknown): boolean {
-    if (permission == '' || null || undefined) {
+    if (permission === '' || permission === null || permission === undefined) {
       return true
     } else {
       return false
