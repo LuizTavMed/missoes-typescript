@@ -1,4 +1,7 @@
 const config = {
+  cryptography:{
+    saltRounds: process.env.SALT_ROUNDS_BCRYPT
+  },
   api: {
     host: process.env.HOST_API ?? 'localhost',
     port: process.env.PORT_API ?? 4000
