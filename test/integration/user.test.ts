@@ -1,6 +1,7 @@
 // imports
 import App from '../../src/api/App'
 import MariadbTest from '../../src/data/MariadbTest'
+import Crypto from '../../src/helper/Crypto'
 import LogRouter from '../../src/api/router/LogRouter'
 import LogController from '../../src/api/controller/LogController'
 import LogRepository from '../../src/api/repository/LogRepository'
@@ -15,19 +16,18 @@ import UserEntity from '../../src/api/entity/UserEntity'
 import * as request from 'supertest'
 
 const mariadbTest = new MariadbTest([LogEntity, UserEntity])
+const crypto = new Crypto()
 const logRepository = new LogRepository(mariadbTest.dataSource, LogEntity)
 const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
 const logRouter = new LogRouter(logController)
-const userRepository = new UserRepository(mariadbTest.dataSource, UserEntity)
+const userRepository = new UserRepository(mariadbTest.dataSource, UserEntity, crypto)
 const userValidator = new UserValidator()
 const userController = new UserController(userRepository, userValidator)
 const userRouter = new UserRouter(userController)
 const app = new App(logRouter, userRouter)
 
-
 describe('User integration tests', () => {
-
   beforeEach(async () => {
     app.start()
     await mariadbTest.start()
@@ -47,7 +47,7 @@ describe('User integration tests', () => {
     expect(res.status).toEqual(200)
     expect(res.body.id).toBeDefined()
     expect(res.body.login).toEqual('login')
-    expect(res.body.password).toEqual('password')
+    expect(await crypto.areTheyHashmatched('password', res.body.password)).toEqual(true)
     expect(res.body.permission).toEqual('master')
   })
   test('Should fetch a list with every user', async () => {
@@ -71,7 +71,7 @@ describe('User integration tests', () => {
     expect(res.body.length).toEqual(3)
     expect(res.status).toEqual(200)
   })
-    
+
   test('Should fetch a specific user', async () => {
     await request(app.express).post('/api/user').send({
       login: 'firstUser',
@@ -93,7 +93,7 @@ describe('User integration tests', () => {
     expect(res.body).toEqual(userToFetch)
     expect(res.status).toEqual(200)
   })
-  
+
   test('Should update a specific user', async () => {
     await request(app.express).post('/api/user').send({
       login: 'firstUser',
@@ -119,9 +119,8 @@ describe('User integration tests', () => {
     expect(res.body.login).toEqual(userToUpdate.login)
     expect(res.body.password).toEqual('newPassword')
     expect(res.body.permission).toEqual('newPermission')
-    
   })
-  
+
   test('Should delete a specific user', async () => {
     await request(app.express).post('/api/user').send({
       login: 'firstUser',
@@ -143,6 +142,5 @@ describe('User integration tests', () => {
     expect(res.status).toEqual(200)
     expect(res.body.login).toEqual(userToDelete.login)
     expect(res.body.password).toEqual(userToDelete.password)
-    
   })
 })
