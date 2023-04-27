@@ -2,18 +2,24 @@ import type { Repository, EntityTarget, ObjectLiteral, DataSource } from 'typeor
 
 import type IUserRepository from '../interface/IUserRepository'
 
-import UserEntity from '../entity/UserEntity'
 import type IUser from '../interface/IUser'
+import type ICrypto from '../interface/ICrypto'
 
 class UserRepository implements IUserRepository {
   readonly resource: Repository<ObjectLiteral>
+  readonly crypto: ICrypto
 
-  constructor (dataSource: DataSource, userEntity: EntityTarget<ObjectLiteral>) {
-    this.resource = dataSource.getRepository(UserEntity)
+  constructor (dataSource: DataSource, userEntity: EntityTarget<ObjectLiteral>, crypto: ICrypto) {
+    this.resource = dataSource.getRepository(userEntity)
+    this.crypto = crypto
   }
 
   async create (login: string, password: string, permission: string): Promise<ObjectLiteral> {
-    const user: IUser = { login, password, permission }
+    const user: IUser = {
+      login,
+      password: await this.crypto.getPasswordHash(password),
+      permission
+    }
     await this.resource.save(user)
     return user
   }
