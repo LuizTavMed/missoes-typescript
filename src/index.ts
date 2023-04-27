@@ -1,5 +1,6 @@
 // importando classes
 import App from './api/App'
+import Crypto from './helper/Crypto'
 import Mariadb from './data/Mariadb'
 import LogRouter from './api/router/LogRouter'
 import LogController from './api/controller/LogController'
@@ -16,12 +17,13 @@ import UserEntity from './api/entity/UserEntity'
 import * as dotenv from 'dotenv-safe'
 
 // instanciando classe
+const crypto = new Crypto()
 const mariadb = new Mariadb([LogEntity, UserEntity])
 const logRepository = new LogRepository(mariadb.dataSource, LogEntity)
 const logValidator = new LogValidator()
 const logController = new LogController(logRepository, logValidator)
 const logRouter = new LogRouter(logController)
-const userRepository = new UserRepository(mariadb.dataSource, UserEntity)
+const userRepository = new UserRepository(mariadb.dataSource, UserEntity, crypto)
 const userValidator = new UserValidator()
 const userController = new UserController(userRepository, userValidator)
 const userRouter = new UserRouter(userController)
