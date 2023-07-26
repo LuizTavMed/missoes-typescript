@@ -5,7 +5,7 @@ enum LogErrorMessage {
 }
 
 class LogValidator implements ILogValidator {
-  validate (message: unknown): void {
+  validate (message: string): void {
     if (message === '' || message == null) throw new Error(LogErrorMessage.INVALID_MESSAGE)
   }
 }
