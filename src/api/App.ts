@@ -1,39 +1,25 @@
 // importando interfaces
-import type IApp from './interface/IApp'
-import type ILogRouter from './interface/ILogRouter'
-import type IUserRouter from './interface/IUserRouter'
-import type { Express } from 'express'
-import { Server } from 'http'
+import type IApi from './interface/IApi'
+import { type Server } from 'http'
 
-// importando middlewares
-import * as express from 'express'
-import * as bodyParser from 'body-parser'
-import * as cors from 'cors'
 import config from '../config'
+import type IApp from './interface/IApp'
 
 class App implements IApp {
-  readonly express: Express
+  listener: Server
   hasStarted: boolean = false
-  server = new Server()
-  constructor (readonly logRouter: ILogRouter, readonly userRouter: IUserRouter) {
-    this.express = express()
-    this.logRouter = logRouter
-    this.userRouter = userRouter
-    this.express.use(bodyParser.json())
-    this.express.use(express.json())
-    this.express.use(cors())
-    this.express.use('/api', logRouter.routes)
-    this.express.use('/api', userRouter.routes)
+  constructor (readonly api: IApi, listener: Server) {
+    this.listener = listener
   }
 
   start (): void {
-    this.server = this.express.listen(config.api.port, () => {
-      console.log('Servidor inicializado')
+    this.listener = this.api.server.listen(config.api.port, () => {
+      console.log('Servidor inicializado na porta', config.api.port)
     })
   }
 
   stop (): void {
-    this.server.close()
+    this.listener.close()
   }
 }
 
