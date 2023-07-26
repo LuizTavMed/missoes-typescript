@@ -1,8 +1,8 @@
 interface IUserValidator {
-  isUserValid: (login: string, password: string, permission: string) => boolean
-  isLoginEmpty: (login: string) => boolean
-  isPasswordsEmpty: (passwords: string) => boolean
-  isPermissionEmpty: (permission: string) => boolean
+  validate: (login: string, password: string, email: string, type: string) => Promise<void>
+  isEmpty: (value: string) => boolean
+  loginAlreadyExists: (value: string) => Promise<boolean>
+  emailAlreadyExists: (value: string) => Promise<boolean>
 }
 
 export default IUserValidator
