@@ -1,13 +1,17 @@
-import type { Repository, ObjectLiteral } from 'typeorm'
+import type UserEntity from '../entity/User'
+import type IOracledbDataSource from './IOracledbDataSource'
+import type IUser from './IUser'
 
 interface IUserRepository {
-  readonly resource: Repository<ObjectLiteral>
+  readonly dataSource: IOracledbDataSource
 
-  create: (login: string, password: string, permission: string) => Promise<ObjectLiteral>
-  getAll: () => Promise<ObjectLiteral[] | null>
-  get: (id: number) => Promise<ObjectLiteral | null>
-  update: (id: number, body: ObjectLiteral) => Promise<ObjectLiteral | null>
-  delete: (id: number) => Promise<ObjectLiteral | null>
+  create: (id: string, login: string, password: string, email: string, type: string) => Promise<IUser>
+  getAll: () => Promise<IUser[]>
+  get: (id: string) => Promise<IUser | null>
+  getByLogin: (login: string) => Promise<IUser | null>
+  getByEmail: (email: string) => Promise<IUser | null>
+  update: (id: string, body: UserEntity) => Promise<IUser | null>
+  delete: (id: string) => Promise<IUser | null>
 }
 
 export default IUserRepository
