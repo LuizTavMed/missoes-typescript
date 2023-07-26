@@ -1,13 +1,12 @@
-import type { Repository, ObjectLiteral } from 'typeorm'
+import type ILog from './ILog'
+import type IOracledbDataSource from './IOracledbDataSource'
 
-interface LogRepository {
-  readonly resource: Repository<ObjectLiteral>
+interface ILogRepository {
+  readonly dataSource: IOracledbDataSource
 
-  create: (message: string) => Promise<ObjectLiteral>
-  getAll: () => Promise<ObjectLiteral[] | null>
-  get: (id: number) => Promise<ObjectLiteral | null>
-  update: (id: number, body: ObjectLiteral) => Promise<ObjectLiteral | null>
-  delete: (id: number) => Promise<ObjectLiteral | null>
+  create: (id: string, message: string, date: string) => Promise<ILog>
+  getAll: () => Promise<ILog[]>
+  get: (id: string) => Promise<ILog | null>
 }
 
-export default LogRepository
+export default ILogRepository
