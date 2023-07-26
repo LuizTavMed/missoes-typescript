@@ -1,4 +1,5 @@
 interface ILog {
+  id: string
   date: string
   message: string
 }
