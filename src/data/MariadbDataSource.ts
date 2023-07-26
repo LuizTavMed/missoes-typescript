@@ -4,18 +4,17 @@ import * as mariadb from 'mariadb'
 import type { Connection, Pool } from 'mariadb'
 
 import type IMariadbDataSource from '../api/interface/IMariadbDataSource'
-import type ILogEntity from '../api/interface/ILogEntity'
+import type IUser from '../api/interface/IUser'
+import type ILog from '../api/interface/ILog'
 
 class MariadbDataSource implements IMariadbDataSource {
   private connection: Connection | undefined
   private pool: Pool | undefined
 
-  constructor () {}
-
   async bootstrap (): Promise<boolean> {
     await this.openConnectionPool()
     await this.createNecessaryDatabases()
-    await this.useIntranetDatabase()
+    await this.useDatabaseDatabase()
     await this.createNecessaryTables()
     return true
   }
@@ -48,34 +47,28 @@ class MariadbDataSource implements IMariadbDataSource {
     return true
   }
 
-  async intranetDatabaseExists (): Promise<boolean> {
-    const databaseList = await this.pool?.query("SHOW DATABASES LIKE 'intranet' ;")
+  async databaseDatabaseExists (): Promise<boolean> {
+    const databaseList = await this.pool?.query("SHOW DATABASES LIKE 'database' ;")
     if (databaseList.length === 0) {
       return false
     }
     return true
   }
 
-  async createIntranetDatabase (): Promise<boolean> {
-    await this.pool?.query('CREATE DATABASE intranet ;')
+  async createDatabaseDatabase (): Promise<boolean> {
+    await this.pool?.query('CREATE DATABASE database ;')
     return true
   }
 
-  async useIntranetDatabase (): Promise<boolean> {
-    await this.pool?.query('USE intranet')
+  async useDatabaseDatabase (): Promise<boolean> {
+    await this.pool?.query('USE database')
     return true
   }
 
   async createNecessaryDatabases (): Promise<boolean> {
-    if (!await this.intranetDatabaseExists()) {
-      await this.createIntranetDatabase()
+    if (!await this.databaseDatabaseExists()) {
+      await this.createDatabaseDatabase()
     }
-    return true
-  }
-
-  async createFileTable (): Promise<boolean> {
-    console.log('creating file table')
-    await this.pool?.query("CREATE TABLE `file` (`id` UUID NOT NULL,`name` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`title` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`description` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`type` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`date` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`base64` TEXT NOT NULL COLLATE 'latin1_swedish_ci')COLLATE='latin1_swedish_ci'ENGINE=InnoDB;")
     return true
   }
 
@@ -86,13 +79,13 @@ class MariadbDataSource implements IMariadbDataSource {
   }
 
   async createUserTable (): Promise<boolean> {
-    console.log('creating file table')
+    console.log('creating user table')
     await this.pool?.query("CREATE TABLE `user` (`id` UUID NOT NULL,`login` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`password` VARCHAR(300) NOT NULL COLLATE 'latin1_swedish_ci',`email` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',`type` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci')COLLATE='latin1_swedish_ci'ENGINE=InnoDB;")
     return true
   }
 
   async tableExists (tableName: string): Promise<boolean> {
-    const res = await this.pool?.query(`SHOW TABLES FROM intranet LIKE '${tableName}' ;`)
+    const res = await this.pool?.query(`SHOW TABLES FROM database LIKE '${tableName}' ;`)
     if (res[0] == null) {
       return false
     }
@@ -100,69 +93,48 @@ class MariadbDataSource implements IMariadbDataSource {
   }
 
   async createNecessaryTables (): Promise<boolean> {
-    if (!await this.tableExists('file')) await this.createFileTable()
     if (!await this.tableExists('log')) await this.createLogTable()
     if (!await this.tableExists('user')) await this.createUserTable()
     return true
   }
 
-  async insertFileRegistry (id: string, name: string, title: string, description: string, type: string, date: string, path: string): Promise<IFileEntity> {
-    await this.pool?.query(`INSERT INTO intranet.file (id, name, title, description, type, date, base64) VALUES ('${id}', '${name}', '${title}', '${description}', '${type}', '${date}', '${path}');`)
-    return { id, name, title, description, type, date, path }
-  }
-
-  async insertLogRegistry (id: string, date: string, message: string): Promise<ILogEntity> {
-    await this.pool?.query(`INSERT INTO intranet.log (id, date, message) VALUES ('${id}', '${date}', '${message}');`)
+  async insertLogRegistry (id: string, date: string, message: string): Promise<ILog> {
+    await this.pool?.query(`INSERT INTO database.log (id, date, message) VALUES ('${id}', '${date}', '${message}');`)
     return { id, date, message }
   }
 
-  async insertUserRegistry (id: string, login: string, password: string, email: string, type: string): Promise<IUserEntity> {
-    await this.pool?.query(`INSERT INTO intranet.user (id, login, password, email, type) VALUES ('${id}', '${login}', '${password}', '${email}', '${type}');`)
+  async insertUserRegistry (id: string, login: string, password: string, email: string, type: string): Promise<IUser> {
+    await this.pool?.query(`INSERT INTO database.user (id, login, password, email, type) VALUES ('${id}', '${login}', '${password}', '${email}', '${type}');`)
     return { id, login, password, email, type }
   }
 
-  async getEveryFileRegistry (): Promise<IFileEntity[]> {
-    const tableContent = await this.pool?.query('SELECT * FROM intranet.file ;')
+  async getEveryLogRegistry (): Promise<ILog[]> {
+    const tableContent = await this.pool?.query('SELECT * FROM database.log ;')
     return tableContent
   }
 
-  async getEveryLogRegistry (): Promise<ILogEntity[]> {
-    const tableContent = await this.pool?.query('SELECT * FROM intranet.log ;')
+  async getEveryUserRegistry (): Promise<IUser[]> {
+    const tableContent = await this.pool?.query('SELECT * FROM database.user ;')
     return tableContent
   }
 
-  async getEveryUserRegistry (): Promise<IUserEntity[]> {
-    const tableContent = await this.pool?.query('SELECT * FROM intranet.user ;')
-    return tableContent
-  }
-
-  async getFileBy (parameter: string, value: string): Promise<IFileEntity[]> {
-    const data = await this.pool?.query(`SELECT * FROM intranet.file WHERE ${parameter} = '${value}'`)
+  async getLogBy (parameter: string, value: string): Promise<ILog[]> {
+    const data = await this.pool?.query(`SELECT * FROM database.log WHERE ${parameter} = '${value}'`)
     return data
   }
 
-  async getLogBy (parameter: string, value: string): Promise<ILogEntity[]> {
-    const data = await this.pool?.query(`SELECT * FROM intranet.log WHERE ${parameter} = '${value}'`)
+  async getUserBy (parameter: string, value: string): Promise<IUser[]> {
+    const data = await this.pool?.query(`SELECT * FROM database.user WHERE ${parameter} = '${value}';`)
     return data
   }
 
-  async getUserBy (parameter: string, value: string): Promise<IUserEntity[]> {
-    const data = await this.pool?.query(`SELECT * FROM intranet.user WHERE ${parameter} = '${value}';`)
-    return data
-  }
-
-  async updateUserById (id: string, login: string, password: string, email: string, type: string): Promise<IUserEntity> {
-    await this.pool?.query(`UPDATE  intranet.user SET id = '${id}', login = '${login}', password = '${password}', email = '${email}', type= '${type}' WHERE id = '${id}';`)
+  async updateUserById (id: string, login: string, password: string, email: string, type: string): Promise<IUser> {
+    await this.pool?.query(`UPDATE  database.user SET id = '${id}', login = '${login}', password = '${password}', email = '${email}', type= '${type}' WHERE id = '${id}';`)
     return { id, login, password, email, type }
-  }
-
-  async deleteFileById (id: string): Promise<boolean> {
-    await this.pool?.query(`DELETE FROM intranet.file WHERE id = '${id}';`)
-    return true
   }
 
   async deleteUserById (id: string): Promise<boolean> {
-    await this.pool?.query(`DELETE FROM intranet.user WHERE id = '${id}';`)
+    await this.pool?.query(`DELETE FROM database.user WHERE id = '${id}';`)
     return true
   }
 }
