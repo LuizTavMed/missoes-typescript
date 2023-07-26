@@ -1,11 +1,11 @@
 import type ILogValidator from '../interface/ILogValidator'
 
 enum LogErrorMessage {
-  INVALID_MESSAGE = "The message you've inserted was considered invalid'"
+  INVALID_MESSAGE = 'Invalid message',
 }
 
 class LogValidator implements ILogValidator {
-  validate (message: string): void {
+  validate (message: unknown): void {
     if (message === '' || message == null) throw new Error(LogErrorMessage.INVALID_MESSAGE)
   }
 }
