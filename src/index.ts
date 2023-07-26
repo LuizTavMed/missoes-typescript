@@ -1,35 +1,100 @@
-// importando classes
-import App from './api/App'
-import Crypto from './helper/Crypto'
-import Mariadb from './data/Mariadb'
-import LogRouter from './api/router/LogRouter'
-import LogController from './api/controller/LogController'
-import LogRepository from './api/repository/LogRepository'
-import LogValidator from './api/validator/LogValidator'
-import LogEntity from './api/entity/LogEntity'
-import UserRouter from './api/router/UserRouter'
-import UserController from './api/controller/UserController'
-import UserRepository from './api/repository/UserRepository'
-import UserValidator from './api/validator/UserValidator'
-import UserEntity from './api/entity/UserEntity'
-
-// importando .env
+// importing external libraries
+import { Server } from 'http'
 import * as dotenv from 'dotenv-safe'
+import * as express from 'express'
 
-// instanciando classe
+// importing helpers
+import Api from './helper/Api'
+import TokenManager from './helper/TokenManager'
+import ApiMiddleware from './helper/ApiMiddleware'
+import Crypto from './helper/Crypto'
+import UuidGenerator from './helper/UuidGenerator'
+import DateManager from './helper/DateManager'
+
+// importing data classes
+// import MariadbDataSource from './data/MariadbDataSource'
+import OracledbDataSource from './data/OracledbDataSource'
+
+// importing routers
+import LogRouter from './api/router/LogRouter'
+import UserRouter from './api/router/UserRouter'
+import AuthRouter from './api/router/AuthRouter'
+
+// importing controllers
+import LogController from './api/controller/LogController'
+import UserController from './api/controller/UserController'
+import AuthController from './api/controller/AuthController'
+
+// importing validators
+import LogValidator from './api/validator/LogValidator'
+import UserValidator from './api/validator/UserValidator'
+
+// importing services
+import LogService from './api/service/LogService'
+import UserService from './api/service/UserService'
+import AuthService from './api/service/AuthService'
+
+// importing repositories
+import LogRepository from './api/repository/LogRepository'
+import UserRepository from './api/repository/UserRepository'
+
+// importing entities
+// import FileEntity from './api/entity/FileEntity'
+// import LogEntity from './api/entity/LogEntity'
+// import UserEntity from './api/entity/UserEntity'
+
+// importing app
+import App from './api/App'
+
+// instanciating helpers
 const crypto = new Crypto()
-const mariadb = new Mariadb([LogEntity, UserEntity])
-const logRepository = new LogRepository(mariadb.dataSource, LogEntity)
-const logValidator = new LogValidator()
-const logController = new LogController(logRepository, logValidator)
-const logRouter = new LogRouter(logController)
-const userRepository = new UserRepository(mariadb.dataSource, UserEntity, crypto)
-const userValidator = new UserValidator()
-const userController = new UserController(userRepository, userValidator)
-const userRouter = new UserRouter(userController)
-const app = new App(logRouter, userRouter)
+const uuidGenerator = new UuidGenerator()
+const dateManager = new DateManager()
+const tokenManager = new TokenManager()
+const server = new Server()
+const apiMiddleware = new ApiMiddleware()
 
-// iniciando banco de dados e app
+// instanciating data classes
+const oracledbDataSource = new OracledbDataSource()
+
+// instanciating repositories
+// using repositories with mariadb
+// const fileRepository = new FileRepository(mariadbDataSource, fileManager, uuidGenerator)
+// const logRepository = new LogRepository(mariadbDataSource, uuidGenerator, dateManager)
+// const userRepository = new UserRepository(mariadbDataSource)
+
+// using repositories with oracledb
+const logRepository = new LogRepository(oracledbDataSource, uuidGenerator, dateManager)
+const userRepository = new UserRepository(oracledbDataSource)
+
+// instanciating services
+const logService = new LogService(logRepository, uuidGenerator, dateManager)
+const userService = new UserService(userRepository, crypto, uuidGenerator, dateManager)
+const authService = new AuthService(userRepository, crypto, tokenManager)
+
+// instanciating validators
+const logValidator = new LogValidator()
+const userValidator = new UserValidator(userRepository)
+
+// instanciating controllers
+const logController = new LogController(logService, logValidator)
+const userController = new UserController(userService, userValidator)
+const authController = new AuthController(authService, userRepository, crypto, tokenManager)
+
+// instanciating routers
+const logRouter = new LogRouter(logController)
+const userRouter = new UserRouter(userController)
+const authRouter = new AuthRouter(authController)
+
+// instanciating app related classes
+const api = new Api(express(), apiMiddleware, logRouter, userRouter, authRouter)
+const app = new App(api, server)
+
+// getting .env configuration
 dotenv.config()
-void mariadb.start()
+
+// starting database and app
+// void mariadbDataSource.bootstrap()
+void oracledbDataSource.start()
+
 app.start()
