@@ -1,82 +1,49 @@
 import { type Request, type Response } from 'express'
 
 import type ILogController from '../interface/ILogController'
-import type ILogRepository from '../interface/ILogRepository'
+import type ILogService from '../interface/ILogService'
 import type ILogValidator from '../interface/ILogValidator'
 
-enum LogError {
-  LOG_INVALID_REQUEST = 'A requisição inserida foi considerada inválida',
-  LOG_LIST_ERROR = 'Houve um erro quando tentamos buscar a lista',
-  LOG_NOT_FOUND = 'Não foi possível encontrar este usuário',
-  LOG_NOT_UPDATED = 'Não foi possível atualizar este usuário',
-  LOG_NOT_DELETED = 'Não foi possível deletar este usuário',
+enum LogErrorMessage {
+  UNKNOWN = 'Unknown error during request',
+  NOT_FOUND = 'The log could not be found',
 }
+
 class LogController implements ILogController {
-  constructor (readonly logRepository: ILogRepository, readonly logValidator: ILogValidator) {
-    this.logRepository = logRepository
-    this.logValidator = logValidator
-  }
+  constructor (readonly logService: ILogService, readonly logValidator: ILogValidator) {}
 
-  async create (req: Request, res: Response): Promise<void> {
+  async create (req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
     try {
-      if (this.logValidator.isLogValid(req.body.message)) {
-        const log = await this.logRepository.create(req.body.message)
-        res.status(200).json(log)
+      this.logValidator.validate(req.body.message)
+      const log = await this.logService.create(req.body.message)
+      return res.status(200).json(log)
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).send(error.message)
       }
-    } catch (erro) {
-      console.error(erro)
-      res.status(400).send(LogError.LOG_INVALID_REQUEST)
+      return res.status(500).send(LogErrorMessage.UNKNOWN)
     }
   }
 
-  async getAll (res: Response): Promise<void> {
+  async getAll (res: Response): Promise<Response<any, Record<string, any>>> {
     try {
-      const listaLogs = await this.logRepository.getAll()
-      res.status(200).json(listaLogs)
-    } catch (erro) {
-      console.error(erro)
-      res.status(400).send(LogError.LOG_INVALID_REQUEST)
+      const logList = await this.logService.getAll()
+      return res.status(200).json(logList)
+    } catch (error) {
+      return res.status(500).send(LogErrorMessage.UNKNOWN)
     }
   }
 
-  async get (req: Request, res: Response): Promise<void> {
+  async get (req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
     try {
-      const log = await this.logRepository.get(parseInt(req.params.id))
+      const log = await this.logService.get(req.params.id)
       if (log != null) {
-        res.status(200).json(log)
+        return res.status(200).json(log)
       } else {
-        res.status(404).send(LogError.LOG_NOT_FOUND)
+        return res.status(404).send(LogErrorMessage.NOT_FOUND)
       }
-    } catch (erro) {
-      res.status(400).send(LogError.LOG_INVALID_REQUEST)
-    }
-  }
-
-  async update (req: Request, res: Response): Promise<void> {
-    try {
-      const log = await this.logRepository.update(parseInt(req.params.id), req.body)
-      if (log !== undefined) {
-        res.status(200).json(log)
-      } else {
-        res.status(404).send(LogError.LOG_NOT_UPDATED)
-      }
-    } catch (erro) {
-      console.log(erro)
-      res.status(400).send(LogError.LOG_INVALID_REQUEST)
-    }
-  }
-
-  async delete (req: Request, res: Response): Promise<void> {
-    try {
-      const log = await this.logRepository.delete(parseInt(req.params.id))
-      if (log != null) {
-        res.status(200).json(log)
-      } else {
-        res.status(404).send(LogError.LOG_NOT_DELETED)
-      }
-    } catch (erro) {
-      console.error(erro)
-      res.status(400).send(LogError.LOG_INVALID_REQUEST)
+    } catch (error) {
+      return res.status(500).send(LogErrorMessage.UNKNOWN)
     }
   }
 }
