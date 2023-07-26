@@ -21,12 +21,6 @@ class LogRouter implements ILogRouter {
     this.routes.get('/log/:id', (req: Request, res: Response) => {
       void logController.get(req, res)
     })
-    this.routes.patch('/log/:id', (req: Request, res: Response) => {
-      void logController.update(req, res)
-    })
-    this.routes.delete('/log/:id', (req: Request, res: Response) => {
-      void logController.delete(req, res)
-    })
   }
 }
 
