@@ -1,61 +1,68 @@
-import type { Repository, EntityTarget, ObjectLiteral, DataSource } from 'typeorm'
 
 import type IUserRepository from '../interface/IUserRepository'
-
 import type IUser from '../interface/IUser'
-import type ICrypto from '../interface/ICrypto'
+import type IOracledbDataSource from '../interface/IOracledbDataSource'
 
 class UserRepository implements IUserRepository {
-  readonly resource: Repository<ObjectLiteral>
-  readonly crypto: ICrypto
-
-  constructor (dataSource: DataSource, userEntity: EntityTarget<ObjectLiteral>, crypto: ICrypto) {
-    this.resource = dataSource.getRepository(userEntity)
-    this.crypto = crypto
-  }
-
-  async create (login: string, password: string, permission: string): Promise<ObjectLiteral> {
-    const user: IUser = {
-      login,
-      password: await this.crypto.getPasswordHash(password),
-      permission
-    }
-    await this.resource.save(user)
+  constructor (readonly dataSource: IOracledbDataSource) { this.dataSource = dataSource }
+  async create (id: string, login: string, password: string, email: string, type: string): Promise<IUser> {
+    await this.dataSource.insertUserRegistry(id, login, password, email, type)
+    const user = { id, login, password, email, type }
     return user
   }
 
-  async getAll (): Promise<ObjectLiteral[] | null> {
-    const listaTodosUsers = await this.resource.find()
-    return listaTodosUsers
+  async getAll (): Promise<IUser[]> {
+    return await this.dataSource.getEveryUserRegistry()
   }
 
-  async get (id: number): Promise<ObjectLiteral | null> {
-    const user = await this.resource.findBy({ id })
-    return user[0]
+  async get (id: string): Promise<IUser | null> {
+    const userList = await this.dataSource.getUserBy('id', id)
+    const user = userList
+    if (user == null) {
+      return null
+    }
+    return user
   }
 
-  async update (id: number, body: ObjectLiteral): Promise<ObjectLiteral> {
-    const user = await this.resource.findBy({ id })
-    if (user[0] === undefined) {
-      return user[0]
+  async getByLogin (login: string): Promise<IUser | null> {
+    const userList = await this.dataSource.getUserBy('login', login)
+    const user = userList
+    return user
+  }
+
+  async getByEmail (email: string): Promise<IUser | null> {
+    const userList = await this.dataSource.getUserBy('email', email)
+    const user = userList
+    return user
+  }
+
+  async update (id: string, body: IUser): Promise<IUser | null> {
+    const userList = await this.dataSource.getUserBy('id', id)
+    const user = userList
+    if (user == null) {
+      return user
     }
     if (body.password !== undefined) {
-      user[0].password = body.password
+      user.password = body.password
     }
-    if (body.permission !== undefined) {
-      user[0].permission = body.permission
+    if (body.email !== undefined) {
+      user.email = body.email
     }
-    await this.resource.save(user[0])
-    return user[0]
+    if (body.type !== undefined) {
+      user.type = body.type
+    }
+    await this.dataSource.updateUserById(id, user.login, user.password, user.email, body.type)
+    return user
   }
 
-  async delete (id: number): Promise<ObjectLiteral | null> {
-    const user = await this.resource.findBy({ id })
-    if (user[0] === undefined) {
-      return user[0]
+  async delete (id: string): Promise<IUser | null> {
+    const userList = await this.dataSource.getUserBy('id', id)
+    const user = userList
+    if (user === undefined) {
+      return user
     } else {
-      await this.resource.remove(user[0])
-      return user[0]
+      await this.dataSource.deleteUserById(id)
+      return user
     }
   }
 }
