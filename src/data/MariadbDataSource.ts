@@ -4,8 +4,6 @@ import * as mariadb from 'mariadb'
 import type { Connection, Pool } from 'mariadb'
 
 import type IMariadbDataSource from '../api/interface/IMariadbDataSource'
-import type IUserEntity from '../api/interface/IUserEntity'
-import type IFileEntity from '../api/interface/IFileEntity'
 import type ILogEntity from '../api/interface/ILogEntity'
 
 class MariadbDataSource implements IMariadbDataSource {
