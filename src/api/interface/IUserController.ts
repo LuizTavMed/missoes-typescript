@@ -1,16 +1,16 @@
 import { type Request, type Response } from 'express'
 import type IUserValidator from './IUserValidator'
-import type IUserRepository from './IUserRepository'
+import type IUserService from './IUserService'
 
 interface IUserController {
-  readonly userRepository: IUserRepository
+  readonly userService: IUserService
   readonly userValidator: IUserValidator
 
-  create: (req: Request, res: Response) => Promise<void>
-  getAll: (res: Response) => Promise<void>
-  get: (req: Request, res: Response) => Promise<void>
-  update: (req: Request, res: Response) => Promise<void>
-  delete: (req: Request, res: Response) => Promise<void>
+  create: (req: Request, res: Response) => Promise<Response<any, Record<string, any>>>
+  getAll: (res: Response) => Promise<Response<any, Record<string, any>>>
+  get: (req: Request, res: Response) => Promise<Response<any, Record<string, any>>>
+  update: (req: Request, res: Response) => Promise<Response<any, Record<string, any>>>
+  delete: (req: Request, res: Response) => Promise<Response<any, Record<string, any>>>
 }
 
 export default IUserController
