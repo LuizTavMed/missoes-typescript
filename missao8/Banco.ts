@@ -14,5 +14,3 @@ export class Banco {
     return this.listaPessoa
   }
 }
-// const lista = new Banco()
-// lista.cadastraPessoa()

@@ -1,18 +1,18 @@
-import { Pessoa } from "./Pessoa"
+import { type Pessoa } from './Pessoa'
 
 export class Banco {
-    listaPessoa: Pessoa[];
-    constructor() {
-        this.listaPessoa = [];
-    }
+  listaPessoa: Pessoa[]
+  constructor () {
+    this.listaPessoa = []
+  }
 
-    cadastraPessoa(pessoa: Pessoa): void {
-        this.listaPessoa.push(pessoa)
-    }
+  cadastraPessoa (pessoa: Pessoa): void {
+    this.listaPessoa.push(pessoa)
+  }
 
-    buscaTodasPessoas() {
-        return this.listaPessoa
-    }
+  buscaTodasPessoas (): Pessoa[] {
+    return this.listaPessoa
+  }
 }
 // const lista = new Banco()
 // lista.cadastraPessoa()
