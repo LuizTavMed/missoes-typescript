@@ -1,7 +1,7 @@
-import express, { type Application } from 'express'
+import * as express from 'express'
 import rotas from './rotas'
 
-const app: Application = express()
+const app = express()
 
 app.use(express.json())
 app.use(rotas)

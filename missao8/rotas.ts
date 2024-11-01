@@ -1,7 +1,7 @@
-import express, { type Router } from 'express' // Importação correta
+import * as express from 'express' // Importação correta
 import { cadastraInformacaoPessoa, listaCadastro } from './controller/cadastroInformacao'
 
-const rotas: Router = express.Router() // Criação do Router
+const rotas = express.Router() // Criação do Router
 
 rotas.post('/api/pessoas', cadastraInformacaoPessoa)
 rotas.get('/api/pessoas', listaCadastro)

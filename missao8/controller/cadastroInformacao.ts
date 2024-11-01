@@ -12,10 +12,15 @@ export const cadastraInformacaoPessoa = (req: Request, res: Response): void => {
   const palavraRestrita: string[] = ['da', 'de', 'a', 'e']
   const listaNomeMinusculo: string[] = nome.toLowerCase().split(' ')
   let nomeTratado: string = ''
+  const temNumeros: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
   for (let i = 0; i < listaNomeMinusculo.length; i++) {
-    if (!palavraRestrita.includes(listaNomeMinusculo[i])) {
+    if (temNumeros.includes(listaNomeMinusculo[i])) {
+      res.status(400).json({ message: 'Nome inválido' })
+    } if (!palavraRestrita.includes(listaNomeMinusculo[i])) {
+      console.log(listaNomeMinusculo)
       nomeTratado += listaNomeMinusculo[i].charAt(0).toUpperCase() + listaNomeMinusculo[i].slice(1) + ' '
+      console.log(nomeTratado)
     } else {
       nomeTratado += listaNomeMinusculo[i] + ' '
     }
@@ -31,12 +36,17 @@ export const cadastraInformacaoPessoa = (req: Request, res: Response): void => {
     return
   }
 
+  // if (idade === null || idade === undefined) {
+  //   res.status(400).json({ message: 'Idade inválida' })
+  //   return
+  // }
+
   if (idade < 18 || idade > 66) {
     res.status(400).json({ message: 'Idade inválida' })
     return
   }
 
-  const pessoa = new Pessoa(nome, email, idade)
+  const pessoa = new Pessoa(nomeTratado, email, idade)
   banco.listaPessoa.push(pessoa)
   res.status(201).json({ message: 'Cadastro realizado com sucesso' })
 }
