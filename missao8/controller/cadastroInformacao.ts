@@ -56,5 +56,6 @@ export const listaCadastro = (req: Request, res: Response): void => {
     res.status(200).json({ listaCadastro: banco.listaPessoa })
     return
   }
+  // console.log('passou aqui')
   res.json(banco.listaPessoa)
 }

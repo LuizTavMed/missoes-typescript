@@ -6,11 +6,11 @@ export class Banco {
     this.listaPessoa = []
   }
 
-  cadastraPessoa (pessoa: Pessoa): void {
-    this.listaPessoa.push(pessoa)
-  }
+  // cadastraPessoa (pessoa: Pessoa): void {
+  //   this.listaPessoa.push(pessoa)
+  // }
 
-  buscaTodasPessoas (): Pessoa[] {
-    return this.listaPessoa
-  }
+  // buscaTodasPessoas (): Pessoa[] {
+  //   return this.listaPessoa
+  // }
 }
