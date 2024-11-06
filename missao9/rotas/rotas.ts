@@ -7,7 +7,7 @@ rotas.post('/api/pessoas', leituraInformacao)
 
 rotas.get('/api/pessoas', listaPessoasCadastradas)
 
-rotas.get('/api/pesssoas/:id', recuperarPessoa)
+rotas.get('/api/pessoas/:id', recuperarPessoa)
 
 rotas.delete('/api/pessoas/:id', excluirPessoa)
 

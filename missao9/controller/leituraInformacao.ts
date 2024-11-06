@@ -57,6 +57,7 @@ export const recuperarPessoa = (req: Request, res: Response): void => {
   const pessoaRecuperacao = banco.listaPessoas.findIndex(indexPessoa => indexPessoa.id === id)
   if (pessoaRecuperacao < 0) {
     res.status(404).json({ message: 'Pessoa não encontrada' })
+    return
   }
 
   const pessoaRecuperada = banco.listaPessoas[pessoaRecuperacao]
