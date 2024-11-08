@@ -30,7 +30,7 @@ export const validacaoLogin = async (req: Request, res: Response): Promise<void>
     // payload, chave secreta, periodo
     // console.log('passou aq')
     // console.log('jwt: ', jwt)
-    const token = jwt.sign({ id }, 'minhaChaveSecreta', { expiresIn: '10m' })
+    const token = jwt.sign({ id, nome, email }, 'minhaChaveSecreta', { expiresIn: '10m' })
     const pessoa = new Pessoa(id, nome, email, token)
     banco.listaPessoas.push(pessoa)
     res.status(200).json({ message: 'Login efetuado com sucesso', token })
