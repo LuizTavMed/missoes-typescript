@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { rotas } from '../missao11/rotas/rotas'
+import rotas from '../missao11/rotas/rotas'
 
 const app = express()
 
