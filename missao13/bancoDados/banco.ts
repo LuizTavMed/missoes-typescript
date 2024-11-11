@@ -1,11 +1,11 @@
-import mariadb from 'mariadb'
+import * as mariadb from 'mariadb'
 
 const pool = mariadb.createPool({
   host: 'localhost',
   user: 'root',
   password: 'mariadb',
   database: 'bancopessoa',
-  connectionLimit: 5
+  connectionLimit: 10
 })
 
 async function banco (): Promise<any> {

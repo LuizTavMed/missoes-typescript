@@ -7,28 +7,6 @@ import banco from '../bancoDados/banco'
 
 // const banco: Banco = new Banco()
 
-export const verificacaoJwt = (req: Request, res: Response, next: NextFunction): void => {
-  const token = req.headers.authorization
-  if (token === undefined || token === null || token.length === 0) {
-    res.status(401).send('Token não fornecido')
-    return
-  }
-  jwt.verify(token, 'chaveSecreta', (error, decoded: any) => {
-    if (error != null) {
-      res.status(403).send('Token inválido')
-    }
-    req.id = decoded.id
-    req.email = decoded.email
-    req.nome = decoded.nome
-
-    // const payload = decoded as JwtPayload
-    // req.id = payload.id
-    // req.nome = payload.nome
-    // req.email = payload.email
-    next()
-  })
-}
-
 export const loginPessoas = async (req: Request, res: Response): Promise<void> => {
   const email: string = req.body.login
   const senha: number = parseInt(req.body.senha)
@@ -54,6 +32,28 @@ export const loginPessoas = async (req: Request, res: Response): Promise<void> =
       detail: error
     })
   }
+}
+
+export const verificacaoJwt = (req: Request, res: Response, next: NextFunction): void => {
+  const token = req.headers.authorization
+  if (token === undefined || token === null || token.length === 0) {
+    res.status(401).send('Token não fornecido')
+    return
+  }
+  jwt.verify(token, 'chaveSecreta', (error, decoded: any) => {
+    if (error != null) {
+      res.status(403).send('Token inválido')
+    }
+    req.id = decoded.id
+    req.email = decoded.email
+    req.nome = decoded.nome
+
+    // const payload = decoded as JwtPayload
+    // req.id = payload.id
+    // req.nome = payload.nome
+    // req.email = payload.email
+    next()
+  })
 }
 
 export const cadastraPessoa = async (req: Request, res: Response): Promise<void> => {
@@ -113,7 +113,7 @@ export const cadastraPessoa = async (req: Request, res: Response): Promise<void>
     const bd = await banco()
     console.log('Conexão abtida: ', bd)
     const query = 'INSERT INTO usuarios (nome, idade, email, id) VALUES (?, ?, ?, ?)'
-    await bd.execute(query, [nome, idade, email, id])
+    await bd.execute(query, [nomeTratado, idade, email, id])
     res.status(201).json({ message: 'Pessoa cadastrada com sucesso' })
   } catch (error) {
     console.error('Erro ao conectar com o banco de dados: ', error)
@@ -144,8 +144,8 @@ export const recuperarPessoa = async (req: Request, res: Response): Promise<void
   try {
     const bd = await banco()
     const query = 'SELECT * FROM usuarios WHERE id =?'
-    await bd.query(query, [id])
-    res.status(200).json({ query })
+    const resultado = await bd.query(query, [id])
+    res.status(200).json({ messagem: resultado })
   } catch (error) {
     console.error('Error ao recuperar pessoa: ', error)
     res.status(500).json({ message: 'Erro interno no servidor', detail: error })
