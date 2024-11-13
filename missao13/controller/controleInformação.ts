@@ -58,71 +58,90 @@ export const verificacaoJwt = (req: Request, res: Response, next: NextFunction):
 
 export const cadastraPessoa = async (req: Request, res: Response): Promise<void> => {
   const nome: string = req.body.nome
-  const idade: number = parseInt(req.body.idade)
+  if (nome === undefined || nome === null) {
+    res.status(400).json({
+      message: 'Nome inválido',
+      details: 'Nome não pode ser vazio',
+      'invalid-params': [{ campo: 'nome', razão: 'você deve indicar um nome válido' }]
+    })
+    return
+  }
   const email: string = req.body.email
+  if (email === undefined || email === null) {
+    res.status(400).json({
+      message: 'Email inválido',
+      details: 'Email não pode ser vazio',
+      'invalid-params': [{ campo: 'email', razão: 'você deve indicar um email válido' }]
+    })
+    return
+  }
+  const idade: number = parseInt(req.body.idade)
+  if (idade === undefined || idade === null) {
+    res.status(400).json({
+      message: 'Idade inválida',
+      details: 'Idade não pode ser vazia',
+      'invalid-params': [{ campo: 'idade', razão: 'você deve indicar uma idade válida' }]
+    })
+    return
+  }
   const id: string = uuidv4()
 
-  const palavraRestrita: string[] = ['da', 'de', 'a', 'e']
-  const listaNomeMinusculo: string[] = nome.toLowerCase().split(' ')
+  const palavrasRestritas: string[] = ['da', 'de', 'a', 'e']
+  const stringLetrasProibidas: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '¨', '&', '*', '(', ')', '_', '+', '=']
+  const frasesMinusculasSeparadas = nome.toLowerCase().split(' ')
   let nomeTratado: string = ''
-  const temNumeros: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
-  for (let i = 0; i < listaNomeMinusculo.length; i++) {
-    if (temNumeros.includes(listaNomeMinusculo[i])) {
+  for (let i = 0; i < frasesMinusculasSeparadas.length; i++) {
+    if (!stringLetrasProibidas.includes(frasesMinusculasSeparadas[i])) {
       res.status(400).json({
         message: 'Nome inválido',
-        detalhes: 'Nome não pode ter numeros',
+        details: 'Nome não pode ter caracteres especiais nem números',
         'invalid-params': [{ campo: 'nome', razão: 'você deve indicar um nome válido' }]
       })
     }
-    if (!palavraRestrita.includes(listaNomeMinusculo[i])) {
-      nomeTratado += listaNomeMinusculo[i].charAt(0).toUpperCase() + listaNomeMinusculo[i].slice(1) + ' '
+    if (!palavrasRestritas.includes(frasesMinusculasSeparadas[i])) {
+      nomeTratado += frasesMinusculasSeparadas[i].charAt(0).toUpperCase() + frasesMinusculasSeparadas[i].slice(1) + ' '
     } else {
-      nomeTratado += listaNomeMinusculo[i] + ' '
+      nomeTratado += frasesMinusculasSeparadas[i] + ' '
     }
   }
 
   if (nomeTratado.length < 5) {
     res.status(400).json({
-      mensagem: 'Nome inválido',
-      detalhes: 'Nome deve ter pelo menos 5 caracteres',
-      'invalid-params': [{ campo: 'nome', razão: 'você deve indicar um nome válido' }]
+      message: 'Nome inválido',
+      details: 'O nome deve ter pelo menos 4 caractere'
     })
     return
   }
 
   if (!email.includes('@')) {
     res.status(400).json({
-      mensagem: 'Email inválido',
-      detalhes: 'Email deve conter o caractere @',
-      'invalid-params': [{ campo: 'email', razão: 'você deve indicar um email correto' }]
+      message: 'Email inválido',
+      details: 'Email deve conter o caractere @',
+      'invalid-params': [{ field: 'email', reason: 'você deve indicar um email válido' }]
     })
     return
   }
 
   if (idade < 18 || idade > 66) {
     res.status(400).json({
-      mensagem: 'Idade inválida',
-      detalhes: 'Idade deve estar entre 18 e 66',
-      'invalid-params': [{ campo: 'idade', razão: 'você deve indicar uma idade válida' }]
+      message: 'Idade inválida',
+      details: 'Idade deve estar entre 18 e 66',
+      'invalid-params': [{ field: 'idade', reason: 'você deve indicar uma idade válida' }]
     })
     return
   }
 
   try {
     const bd = await banco()
-    console.log('Conexão abtida: ', bd)
-    const query = 'INSERT INTO usuarios (nome, idade, email, id) VALUES (?, ?, ?, ?)'
-    await bd.execute(query, [nomeTratado, idade, email, id])
+    console.log('Banco conectado (campos cadastro)', bd)
+    const query = 'INSERT INTO pessoas ( nome, email, idade, id) VALUES (?,?,?,?)'
+    await bd.execute(query, [nomeTratado, email, idade, id])
     res.status(201).json({ message: 'Pessoa cadastrada com sucesso' })
   } catch (error) {
-    console.error('Erro ao conectar com o banco de dados: ', error)
+    console.error('Erro ao conectar com o banco de dados:', error)
     res.status(500).json({ message: 'Erro interno no servidor', detail: error })
   }
-
-  // const pessoa = new Pessoa(nome, idade, email, id)
-  // banco.listaPessoa.push(pessoa)
-  // res.status(201).json({ mensagem: 'Pessoa cadastrada com sucesso', pessoa })
 }
 
 export const listaCadastro = async (req: Request, res: Response): Promise<void> => {

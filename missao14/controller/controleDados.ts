@@ -50,16 +50,93 @@ export const verificacaoJwt = (req: Request, res: Response, next: NextFunction):
 }
 
 export const cadastroPessoa = async (req: Request, res: Response): Promise<void> => {
+  console.log('chegou aqui!')
   const nome: string = req.body.nome
+  console.log('nome ', nome)
+  if (nome === undefined || nome === null) {
+    res.status(400).json({
+      message: 'Nome inválido',
+      details: 'Nome não pode ser vazio',
+      'invalid-params': [{ campo: 'nome', razão: 'você deve indicar um nome válido' }]
+    })
+    return
+  }
   const email: string = req.body.email
+  console.log('chegou aqui!')
+  if (email === undefined || email === null) {
+    res.status(400).json({
+      message: 'Email inválido',
+      details: 'Email não pode ser vazio',
+      'invalid-params': [{ campo: 'email', razão: 'você deve indicar um email válido' }]
+    })
+    return
+  }
   const idade: number = parseInt(req.body.idade)
+  console.log('chegou aqui!')
+  if (idade === undefined || idade === null) {
+    res.status(400).json({
+      message: 'Idade inválida',
+      details: 'Idade não pode ser vazia',
+      'invalid-params': [{ campo: 'idade', razão: 'você deve indicar uma idade válida' }]
+    })
+    return
+  }
   const id: string = uuidv4()
+
+  const palavrasRestritas: string[] = ['da', 'de', 'a', 'e']
+  const stringLetrasProibidas: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '¨', '&', '*', '(', ')', '_', '+', '=']
+  const frasesMinusculasSeparadas = nome.toLowerCase().split(' ')
+  let nomeTratado: string = ''
+
+  for (let i = 0; i < frasesMinusculasSeparadas.length; i++) {
+    if (stringLetrasProibidas.includes(frasesMinusculasSeparadas[i])) {
+      res.status(400).json({
+        message: 'Nome inválido',
+        details: 'Nome não pode ter caracteres especiais nem números',
+        'invalid-params': [{ campo: 'nome', razão: 'você deve indicar um nome válido' }]
+      })
+      return
+    }
+    if (!palavrasRestritas.includes(frasesMinusculasSeparadas[i])) {
+      nomeTratado += frasesMinusculasSeparadas[i].charAt(0).toUpperCase() + frasesMinusculasSeparadas[i].slice(1) + ' '
+    } else {
+      nomeTratado += frasesMinusculasSeparadas[i] + ' '
+    }
+  }
+
+  if (nomeTratado.length < 5) {
+    res.status(400).json({
+      message: 'Nome inválido',
+      details: 'O nome deve ter pelo menos 4 caractere'
+    })
+    return
+  }
+
+  if (!email.includes('@')) {
+    res.status(400).json({
+      message: 'Email inválido',
+      details: 'Email deve conter o caractere @',
+      'invalid-params': [{ field: 'email', reason: 'você deve indicar um email válido' }]
+    })
+    return
+  }
+
+  if (idade < 18 || idade > 66) {
+    res.status(400).json({
+      message: 'Idade inválida',
+      details: 'Idade deve estar entre 18 e 66',
+      'invalid-params': [{ field: 'idade', reason: 'você deve indicar uma idade válida' }]
+    })
+    return
+  }
 
   try {
     const bd = await banco()
     console.log('Banco conectado (campos cadastro)', bd)
+    console.log('chegou aqui!')
     const query = 'INSERT INTO pessoas ( nome, email, idade, id) VALUES (?,?,?,?)'
-    await bd.execute(query, [nome, email, idade, id])
+    await bd.execute(query, [nomeTratado, email, idade, id])
+    console.log('CHEGOU NO FIM')
     res.status(201).json({ message: 'Pessoa cadastrada com sucesso' })
   } catch (error) {
     console.error('Erro ao conectar com o banco de dados:', error)
@@ -99,15 +176,24 @@ export const rescuperarPessoas = async (req: Request, res: Response): Promise<vo
 export const atualizarPessoa = async (req: Request, res: Response): Promise<void> => {
   const id = req.params.id
   const nome: string = req.body.nome
+  if (nome === undefined || nome === null) {
+    res.status(400).json({ message: 'Nome inválido' })
+    return
+  }
   const email: string = req.body.email
+  if (email === undefined || email === null || !email.includes('@')) {
+    res.status(400).json({ message: 'Email inválido' })
+    return
+  }
   const idade: number = parseInt(req.body.idade)
+  if (idade === undefined || idade === null || (idade < 18 || idade > 66)) {
+    res.status(400).json({ message: 'Idade inválida' })
+    return
+  }
 
   try {
     const bd = await banco()
     console.log('Banco conectado (campos atualização)', bd)
-
-    //  tratamento de erros
-
     const query = 'UPDATE pessoas SET nome =?, email =?, idade =? WHERE id =?'
     await bd.execute(query, [nome, email, idade, id])
     res.status(200).json({ message: 'Pessoa atualizada com sucesso' })
