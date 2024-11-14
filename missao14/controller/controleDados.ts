@@ -9,9 +9,10 @@ export const loginPessoa = async (req: Request, res: Response): Promise<void> =>
   const senha: number = parseInt(req.body.senha)
   const id: string = uuidv4()
   const nome: string = 'Luiz Fernando Tavares de Medeiros'
+  const senhaUsuario: number = 12345
 
   try {
-    if (email !== 'luiz@gmail.com' || senha !== 12345) {
+    if (email !== 'luiz@gmail.com' || senha !== senhaUsuario) {
       res.status(401).json({ mensagem: 'Credenciais inválidas' })
     } else if (!email.includes('@')) {
       res.status(400).json({
