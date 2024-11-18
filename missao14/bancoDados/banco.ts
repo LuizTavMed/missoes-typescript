@@ -4,7 +4,7 @@ const poll = mariadb.createPool({
   host: 'localhost',
   user: 'root',
   password: 'mariadb',
-  database: 'missao14',
+  database: 'missao14', // trocar
   connectionLimit: 10
 })
 
