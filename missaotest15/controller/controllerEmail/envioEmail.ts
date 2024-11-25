@@ -10,14 +10,17 @@ const transporter = nodemailer.createTransport({
   }
 })
 // corrigir
-function envioEmail (): void {
-  transporter.sendMail({
+async function envioEmail (to: string, subject: string, text: string): Promise<void> {
+  console.log(`Enviando email para: ${to}`)
+  console.log(`Assunto: ${subject}`)
+  console.log(`Conteudo: ${text}`)
+  await transporter.sendMail({
     from: 'Luiz Fernando <luizfernandosport1987@gmail.com>',
-    to: 'admin <luizfernandotavaresdemedeiros@gmail.com>',
-    subject: 'Troca de Senha',
-    text: 'O codigo para a troca de senha é: '
+    to,
+    subject,
+    text
   }).then(() => {
-    console.log('Email enviado com sucesso: ')
+    console.log('Email enviado com sucesso')
   }).catch((error: any) => {
     console.error(error)
   })
