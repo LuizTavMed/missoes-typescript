@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import banco from '../bancoDados/bancos'
+import banco from '../../bancoDados/bancos'
 import { v4 as uuidv4 } from 'uuid'
 import * as bcrypt from 'bcrypt'
 

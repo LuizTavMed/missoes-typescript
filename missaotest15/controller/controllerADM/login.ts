@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
-import banco from '../bancoDados/bancos'
+import banco from '../../bancoDados/bancos'
 
 export const loginadm = async (req: Request, res: Response): Promise<void> => {
   const email: string = req.body.email
