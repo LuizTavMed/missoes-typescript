@@ -47,6 +47,7 @@ export const verificacaoJwt = (req: Request, res: Response, next: NextFunction):
     req.id = decoded.id
     req.email = decoded.email
     req.nome = decoded.nome
+    next()
   })
 }
 

@@ -9,7 +9,7 @@ rotas.post('/api/login', (req, res) => {
     res.status(500).send({ message: 'Erro interno do servidor' })
   })
 })
-// rotas.use(verificacaoJwt)
+rotas.use(verificacaoJwt)
 rotas.post('/api/pessoas', (req, res) => {
   rotas.use(verificacaoJwt)
   // console.log('passou aq')

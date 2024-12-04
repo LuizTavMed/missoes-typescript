@@ -92,7 +92,7 @@ export const cadastraPessoa = async (req: Request, res: Response): Promise<void>
   let nomeTratado: string = ''
 
   for (let i = 0; i < frasesMinusculasSeparadas.length; i++) {
-    if (!stringLetrasProibidas.includes(frasesMinusculasSeparadas[i])) {
+    if (stringLetrasProibidas.includes(frasesMinusculasSeparadas[i])) {
       res.status(400).json({
         message: 'Nome inválido',
         details: 'Nome não pode ter caracteres especiais nem números',
@@ -147,7 +147,7 @@ export const cadastraPessoa = async (req: Request, res: Response): Promise<void>
 export const listaCadastro = async (req: Request, res: Response): Promise<void> => {
   try {
     const bd = await banco()
-    const query = 'SELECT * FROM usuarios'
+    const query = 'SELECT * FROM pessoas'
     const resultado = await bd.query(query)
     if (resultado === 0) res.status(200).json({ messagem: 'Nenhuma pessoa cadastrada' })
     else res.status(200).json(resultado)
@@ -162,7 +162,7 @@ export const recuperarPessoa = async (req: Request, res: Response): Promise<void
 
   try {
     const bd = await banco()
-    const query = 'SELECT * FROM usuarios WHERE id =?'
+    const query = 'SELECT * FROM pessoas WHERE id =?'
     const resultado = await bd.query(query, [id])
     res.status(200).json({ messagem: resultado })
   } catch (error) {
@@ -192,7 +192,7 @@ export const atualizarPessoa = async (req: Request, res: Response): Promise<void
       res.status(400).json({ message: 'Email inválido' })
       return
     }
-    const query = 'UPDATE usuarios SET nome =?, idade =?, email =? WHERE id =?'
+    const query = 'UPDATE pessoas SET nome =?, idade =?, email =? WHERE id =?'
     const resultado = await bd.execute(query, [nome, idade, email, id])
     if (resultado === 0) {
       res.status(404).json({ messagem: 'Lista vazia' })
@@ -208,7 +208,7 @@ export const excluirPessoa = async (req: Request, res: Response): Promise<void> 
   const id = req.params.id
   try {
     const bd = await banco()
-    const query = 'DELETE FROM usuarios WHERE id =?'
+    const query = 'DELETE FROM pessoas WHERE id =?'
     const resultado = await bd.execute(query, [id])
     if (resultado === 0) {
       res.status(404).json({ messagem: 'Pessoa não encontrada' })

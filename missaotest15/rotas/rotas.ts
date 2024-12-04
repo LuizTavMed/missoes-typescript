@@ -8,6 +8,7 @@ import { buscarUsuario } from '../controller/controllerFuncoes/controllerBusca'
 import { atualizarCadastro } from '../controller/controllerFuncoes/controllerAtualizacao'
 import { excluirCadastro } from '../controller/controllerFuncoes/controllerExcluir'
 import { verificacaojwt } from '../controller/controllerVerificacao/verificacaoAutenticacao'
+import { trocaDaSenha } from '../controller/trocaSenha'
 
 const rotas = express.Router()
 
@@ -24,12 +25,18 @@ rotas.post('/api/login', (req, res) => {
     res.status(500).send({ message: 'Erro interno do servidor' })
   })
 })
-rotas.post('/api/trocaSenha', (req, res) => {
+rotas.post('/api/validacaoTrocaSenha', (req, res) => {
   emailValidaTrocarSenha(req, res).catch((error) => {
     console.error(error)
     res.status(500).send({ message: 'Erro interno do servidor' })
   })
 })
+rotas.put('/api/trocaSenha/:id', (req, res) => {
+  trocaDaSenha(req, res).catch((error) => {
+    console.error(error)
+    res.status(500).json({ error: 'Erro interno do servidor' })
+  })
+}) // troca de senha após reconhecimento do código - PUT ou POST?
 // rotas dos usuarios cadastrados pelo adm
 rotas.post('/api/pessoas', (req, res) => {
   rotas.use(verificacaojwt)
