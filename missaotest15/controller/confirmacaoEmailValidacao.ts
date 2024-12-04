@@ -17,7 +17,7 @@ export const emailValidaTrocarSenha = async (req: Request, res: Response): Promi
     const bd = await banco()
     const query = 'SELECT * FROM tabela_adm WHERE email =?'
     const [resultado]: any[] = await bd.query(query, [email])
-    if (resultado.email === email) {
+    if (resultado.email === 0) {
       res.status(404).json({ message: 'Usuário não encontrado' })
       return
     }
