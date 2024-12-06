@@ -54,7 +54,7 @@ export const cadastraPessoa = async (req: Request, res: Response): Promise<void>
 
   try {
     const bd = await banco()
-    const query = 'INSERT INTO pessoa (nome, email, idade, id) VALUES (?, ?, ?)'
+    const query = 'INSERT INTO pessoas (nome, email, idade, id) VALUES (?, ?, ?, ?)'
     await bd.execute(query, [nomeTratado, email, idade, id])
     res.status(201).json({ message: 'Pessoa cadastrada com sucesso' })
   } catch (error) {

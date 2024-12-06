@@ -38,6 +38,7 @@ rotas.put('/api/trocaSenha/:id', (req, res) => {
   })
 }) // troca de senha após reconhecimento do código - PUT ou POST?
 // rotas dos usuarios cadastrados pelo adm
+rotas.use(verificacaojwt)
 rotas.post('/api/pessoas', (req, res) => {
   rotas.use(verificacaojwt)
   // console.log('passou aq')

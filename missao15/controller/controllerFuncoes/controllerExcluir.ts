@@ -7,7 +7,7 @@ export const excluirCadastro = async (req: Request, res: Response): Promise<void
     // Aqui você pode implementar a lógica para excluir o cadastro do banco de dados
     // Por exemplo, você pode usar um query SQL para deletar o registro com o id fornecido
     const bd = await banco()
-    const query = 'DELETE FROM cadastros WHERE id =?'
+    const query = 'DELETE FROM pessoas WHERE id =?'
     const resultado = await bd.execute(query, [id])
     if (resultado === 0) {
       res.status(404).json({ message: 'Cadastro não encontrado' })

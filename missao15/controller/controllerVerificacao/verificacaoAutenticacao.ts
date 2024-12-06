@@ -9,8 +9,8 @@ export const verificacaojwt = (req: Request, res: Response, next: NextFunction):
     res.status(401).send('Token não fornecido')
     return
   }
-  jwt.verify(tokenJWT, 'chaveSecreta', (decoded: any) => {
-    if (Error != null) {
+  jwt.verify(tokenJWT, 'chaveSecreta', (error, decoded: any) => {
+    if (error != null) {
       res.status(403).send('Token inválido')
       return
     }

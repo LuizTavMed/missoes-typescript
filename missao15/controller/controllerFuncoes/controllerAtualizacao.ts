@@ -21,7 +21,7 @@ export const atualizarCadastro = async (req: Request, res: Response): Promise<vo
   }
   try {
     const bd = await banco()
-    const query = 'UPGRADE pessoas SET nome=?, email=?, idade=? WHERE id=?'
+    const query = 'UPDATE pessoas SET nome=?, email=?, idade=? WHERE id=?'
     await bd.execute(query, [nome, email, idade, id])
     res.status(200).json({ message: 'Cadastro atualizado com sucesso' })
   } catch (error) {

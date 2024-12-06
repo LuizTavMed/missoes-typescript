@@ -6,7 +6,7 @@ export const buscarUsuario = async (req: Request, res: Response): Promise<void> 
   const id = req.params.id
   try {
     const bd = await banco()
-    const query = 'SELECT * FROM usuarios WHERE id =?'
+    const query = 'SELECT * FROM pessoas WHERE id =?'
     const resultado = await bd.query(query, [id])
     if (resultado.length === 0) {
       res.status(404).json({ message: 'Usuário não encontrado' })
