@@ -9,10 +9,8 @@ rotas.post('/api/login', (req, res) => {
     res.status(500).json({ error: 'Erro interno do servidor' })
   })
 })
-
-rotas.use(verificacaoJwt)
-
 rotas.post('/api/pessoas', cadastraPessoa)
+rotas.use(verificacaoJwt)
 rotas.get('/api/pessoas', listaCadastro)
 rotas.get('/api/pessoas/:id', recuperarPessoa)
 rotas.put('/api/pessoas/:id', atualizarPessoa)

@@ -36,6 +36,8 @@ export const loginPessoas = async (req: Request, res: Response): Promise<void> =
   const nome: string = 'Luiz Fernando Tavares de Medeiros'
   try {
     if (email !== 'luiz@gmail.com' || senha !== 12345) {
+      console.log(' email: ', email)
+      console.log(' senha: ', senha)
       res.status(401).json({ mensagem: 'Credenciais inválidas' })
     } else if (!email.includes('@')) {
       res.status(400).json({

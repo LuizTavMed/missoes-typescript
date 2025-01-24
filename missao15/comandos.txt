@@ -1,0 +1,1 @@
+yarn ts-node ./missao15/app.ts
