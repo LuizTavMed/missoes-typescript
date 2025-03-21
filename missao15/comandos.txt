@@ -1,1 +1,3 @@
 yarn ts-node ./missao15/app.ts
+
+Tem que confirmar o whatsapp no twilio
